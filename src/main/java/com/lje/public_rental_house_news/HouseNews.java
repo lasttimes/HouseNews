@@ -58,6 +58,7 @@ public class HouseNews {
     @EngineFunction("checkLatestUpdateTime")
     public static void checkLatestUpdateTime() {
         List<PathInfo> pathInfoList = Utils.loadPathList();
+        logger.info(">>> checkLatestUpdateTime" );
         if (pathInfoList == null) {
             logger.error("checkLatestUpdateTime: pathInfoList null");
             return;
@@ -89,6 +90,7 @@ public class HouseNews {
 
     @EngineFunction("getLatestNews")
     public static void getLatestNews(@EngineFunctionParam("pathName") String pathName) {
+        logger.info(">>> getLatestNews pathName:" + pathName);
         List<PathInfo> pathInfoList = Utils.loadPathList();
         if (pathInfoList == null) {
             logger.error("checkLatestUpdateTime: pathInfoList null");
