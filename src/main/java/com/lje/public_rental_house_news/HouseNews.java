@@ -115,12 +115,12 @@ public class HouseNews {
         }
         String id = o.getString(COL_NEWS_ID);
         NewsInfo newsInfo = getLatestNewsInfo(pathInfo, id);
+        logger.info("newsInfo:" + newsInfo);
         if (newsInfo == null) {
             return;
         }
         o.put(COL_NEWS_ID, newsInfo.id);
         o.saveInBackground();
-        logger.info("newsInfo:" + newsInfo);
         AVPush push = new AVPush();
         String message = pathName + "有新的公告";
         push.setMessage(message);
