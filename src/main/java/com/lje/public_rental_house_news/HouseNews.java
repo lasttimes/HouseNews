@@ -2,9 +2,7 @@ package com.lje.public_rental_house_news;
 
 import cn.leancloud.EngineFunction;
 import cn.leancloud.EngineFunctionParam;
-import com.avos.avoscloud.AVCloud;
-import com.avos.avoscloud.AVException;
-import com.avos.avoscloud.AVPush;
+import com.avos.avoscloud.*;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -12,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -28,21 +27,17 @@ public class HouseNews {
 
     private static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ISO_DATE_TIME;
 
-    // 最后更新id
-    private static final String LATEST_ID_PROPS_NAME = "houseNews.props";
 
-    // 上次成功更新时间
-    private static final String LATEST_SUCCESS_UPDATE_TIME_PROPS_NAME = "latestSuccessUpdateTime.props";
-
+    private static final String COL_ORGANIZE_NAME = "organizeName";
+    private static final String COL_NEWS_ID = "newsId";
 
     // 查找对应 html 中的 id ,对比保存的上一次最新id，
     // 如果没有保存记录，或者新id 大于保存id，返回对应 NewsInfo
-    private static NewsInfo getLatestNewsInfo(PathInfo pathInfo, Properties props) {
+    private static NewsInfo getLatestNewsInfo(PathInfo pathInfo, String lastId) {
         String htmlBody = getHtmlBodyText(pathInfo.url);
         if (htmlBody == null) {
             return null;
         }
-        String lastId = props.getProperty(pathInfo.name);
         Pattern pattern = Pattern.compile(pathInfo.regex);
         Matcher m = pattern.matcher(htmlBody);
 
@@ -75,41 +70,6 @@ public class HouseNews {
         }
     }
 
-    @EngineFunction("pushLatestHouseNews")
-    public static void pushLatestHouseNews() {
-        List<PathInfo> pathInfoList = Utils.loadPathList();
-        if (pathInfoList == null) {
-            return;
-        }
-        Properties latestIdProps = Utils.loadProp(LATEST_ID_PROPS_NAME);
-        List<PathInfo> needPushNewsInfoList = new ArrayList<>();
-        for (PathInfo pathInfo : pathInfoList) {
-            NewsInfo newsInfo = getLatestNewsInfo(pathInfo, latestIdProps);
-            if (newsInfo != null) {
-                latestIdProps.setProperty(pathInfo.name, newsInfo.id);
-                needPushNewsInfoList.add(pathInfo);
-            }
-        }
-        if (needPushNewsInfoList.size() > 0) {
-            Utils.saveProp(latestIdProps, LATEST_ID_PROPS_NAME);
-        }
-        logger.info("needPushNewsInfoList:" + needPushNewsInfoList);
-        if (needPushNewsInfoList.size() > 0) {
-            StringBuilder sb = new StringBuilder();
-            sb.append("有新公告：");
-            for (int i = 0; i < needPushNewsInfoList.size(); i++) {
-                if (i != 0) {
-                    sb.append(",");
-                }
-                sb.append(needPushNewsInfoList.get(i).name);
-            }
-            AVPush push = new AVPush();
-            push.setMessage(sb.toString());
-            logger.info("push message:" + sb.toString());
-            push.sendInBackground();
-        }
-    }
-
     // 从配置文件读取上次成功更新时间，如是超出1小时，则再次请求更新
     @EngineFunction("checkLatestUpdateTime")
     public static void checkLatestUpdateTime() {
@@ -118,29 +78,32 @@ public class HouseNews {
             logger.error("checkLatestUpdateTime: pathInfoList null");
             return;
         }
-        Properties latestSucUpdateTimeProps = Utils.loadProp(LATEST_SUCCESS_UPDATE_TIME_PROPS_NAME);
-        List<String> logRefreshPathList = new ArrayList<>();
         for (PathInfo pathInfo : pathInfoList) {
-            String fmtTimeStr = latestSucUpdateTimeProps.getProperty(pathInfo.name);
-            LocalDateTime dateTime = fmtTimeStr != null ?
-                    LocalDateTime.parse(fmtTimeStr, DATE_TIME_FORMATTER) :
-                    LocalDateTime.MIN;
-            if (dateTime.plusHours(1).isBefore(LocalDateTime.now())) {
-                logRefreshPathList.add(pathInfo.name);
-                Map<String, String> params = Collections.singletonMap("pathName", pathInfo.name);
-                try {
-                    AVCloud.callFunction("getLatestNews", params);
-                } catch (AVException e) {
-                    e.printStackTrace();
+            // 查询最后更新时间
+            AVQuery<AVObject> query = new AVQuery<>("LatestUpdate");
+            query.whereEqualTo(COL_ORGANIZE_NAME, pathInfo.name);
+            try{
+                List<AVObject> list = query.find();
+                LocalDateTime dateTime;
+                if (list == null || list.size() == 0) {
+                    dateTime = LocalDateTime.MIN;
+                } else {
+                    AVObject o = list.get(0);
+                    Date d = o.getUpdatedAt();
+                    dateTime = LocalDateTime.ofInstant(d.toInstant(), ZoneId.systemDefault());
                 }
+                logger.info("checkLatestUpdateTime: " + pathInfo.name + " " + dateTime);
+                if (dateTime.plusHours(1).isBefore(LocalDateTime.now())) {
+                    Map<String, String> params = Collections.singletonMap("pathName", pathInfo.name);
+                    try {
+                        AVCloud.callFunction("getLatestNews", params);
+                    } catch (AVException avE) {
+                        avE.printStackTrace();
+                    }
+                }
+            }catch (AVException e){
+                e.printStackTrace();
             }
-        }
-
-        // log
-        if (logRefreshPathList.size() == 0) {
-            logger.info("checkLatestUpdateTime: No need for update");
-        } else {
-            logger.info("checkLatestUpdateTime: " + logRefreshPathList);
         }
     }
 
@@ -152,34 +115,41 @@ public class HouseNews {
             return;
         }
         PathInfo pathInfo = null;
-        for (PathInfo info:pathInfoList){
+        for (PathInfo info : pathInfoList) {
             if (info.name.equals(pathName)) {
                 pathInfo = info;
                 break;
             }
         }
         if (pathInfo == null) {
-            logger.error("getLatestNews: pathName[%s] not found",pathName);
+            logger.error("getLatestNews: pathName[%s] not found", pathName);
             return;
         }
-        Properties latestIdProps = Utils.loadProp(LATEST_ID_PROPS_NAME);
-        NewsInfo newsInfo = getLatestNewsInfo(pathInfo, latestIdProps);
-        if (newsInfo != null){
-            logger.info("newsInfo:" + newsInfo);
 
+        AVQuery<AVObject> query = new AVQuery<>("LatestUpdate");
+        query.whereEqualTo("o", pathInfo.name);
+        try {
+            List<AVObject> list = query.find();
+            if (list == null || list.size() == 0) {
+                return;
+            }
+            AVObject o = list.get(0);
+            String id = o.getString(COL_NEWS_ID);
+            NewsInfo newsInfo = getLatestNewsInfo(pathInfo, id);
+            if (newsInfo == null) {
+                return;
+            }
+            o.put(COL_NEWS_ID,newsInfo.id);
+            o.saveInBackground();
+            logger.info("newsInfo:" + newsInfo);
             AVPush push = new AVPush();
-            String message = pathName+"有新的公告";
+            String message = pathName + "有新的公告";
             push.setMessage(message);
             push.sendInBackground();
             logger.info("push message:" + message);
 
-            latestIdProps = Utils.loadProp(LATEST_ID_PROPS_NAME);
-            latestIdProps.setProperty(pathName,newsInfo.id);
-            Utils.saveProp(latestIdProps,LATEST_ID_PROPS_NAME);
-
-            Properties latestSucUpdateTimeProps = Utils.loadProp(LATEST_SUCCESS_UPDATE_TIME_PROPS_NAME);
-            latestSucUpdateTimeProps.setProperty(pathName,LocalDateTime.now().format(DATE_TIME_FORMATTER));
-            Utils.saveProp(latestSucUpdateTimeProps,LATEST_SUCCESS_UPDATE_TIME_PROPS_NAME);
+        } catch (AVException e) {
+            e.printStackTrace();
         }
     }
 
