@@ -1,4 +1,4 @@
-package cn.leancloud.demo.todo;
+package com.lje.public_rental_house_news;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -8,7 +8,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.avos.avoscloud.AVCloud;
-import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.internal.impl.JavaRequestSignImplementation;
 
 import cn.leancloud.LeanEngine;
