@@ -23,8 +23,6 @@ public class HouseNews {
 
     private static Logger logger = LogManager.getLogger();
 
-    private static final OkHttpClient sClient = new OkHttpClient();
-
     private static final String TABLE_NAME = "LatestUpdate";
     private static final String COL_ORGANIZE_NAME = "organizeName";
     private static final String COL_NEWS_ID = "newsId";
@@ -32,7 +30,7 @@ public class HouseNews {
     // 查找对应 html 中的 id ,对比保存的上一次最新id，
     // 如果没有保存记录，或者新id 大于保存id，返回对应 NewsInfo
     private static NewsInfo getLatestNewsInfo(PathInfo pathInfo, String lastId) {
-        String htmlBody = getHtmlBodyText(pathInfo.url);
+        String htmlBody = Utils.getHtmlBodyText(logger,pathInfo.url);
         if (htmlBody == null) {
             return null;
         }
@@ -50,6 +48,8 @@ public class HouseNews {
                     || info.id.compareTo(lastId) > 0) {
                 return info;
             }
+        } else {
+            logger.fatal("Pattern find failed! " + pathInfo.url);
         }
         return null;
     }
@@ -58,7 +58,7 @@ public class HouseNews {
     @EngineFunction("checkLatestUpdateTime")
     public static void checkLatestUpdateTime() {
         List<PathInfo> pathInfoList = Utils.loadPathList();
-        logger.info(">>> checkLatestUpdateTime" );
+        logger.info(">>> checkLatestUpdateTime");
         if (pathInfoList == null) {
             logger.error("checkLatestUpdateTime: pathInfoList null");
             return;
@@ -128,22 +128,6 @@ public class HouseNews {
         logger.info("push message:" + message);
     }
 
-    private static String getHtmlBodyText(String url) {
-        try {
-            Request request = new Request.Builder()
-                    .url(url)
-                    .build();
-
-            Response response = sClient.newCall(request).execute();
-            String body = response.body() != null ? response.body().string() : null;
-            logger.warn("request succeed:" + url);
-            return body;
-        } catch (Exception e) {
-            logger.warn(e.getMessage() + " " + url);
-            return null;
-        }
-    }
-
     private static AVObject findAVObjectEquals(Object equalsValue) {
         AVQuery<AVObject> query = new AVQuery<>(HouseNews.TABLE_NAME);
         query.whereEqualTo(HouseNews.COL_ORGANIZE_NAME, equalsValue);
@@ -162,27 +146,6 @@ public class HouseNews {
         checkLatestUpdateTime();
     }
 
-    static class PathInfo {
-        public PathInfo() {
-
-        }
-
-        @SuppressWarnings("WeakerAccess")
-        public String name;
-        @SuppressWarnings("WeakerAccess")
-        public String url;
-        @SuppressWarnings("WeakerAccess")
-        public String regex;
-
-        @Override
-        public String toString() {
-            return "PathInfo{" +
-                    "name='" + name + '\'' +
-                    ", url='" + url + '\'' +
-                    ", regex='" + regex + '\'' +
-                    '}';
-        }
-    }
 
     static class NewsInfo implements Comparable<NewsInfo> {
         String id;

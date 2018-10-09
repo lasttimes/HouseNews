@@ -37,7 +37,7 @@
   {
     "name": "光明区住建局",
     "url": "http://www.szgm.gov.cn/xxgk/qbmbscxxgkml/zfhjsjcsgxj_118125/xxgk/qt_118138/tzgg_118140/",
-    "regex": "<ul\\s*class=\"ftdt-list\">\\s*<li>\\s*<a\\s*href=\"(.*/(.*?).htm)\"\\s*title=\"(.*?)\".*?<span>\\s*(.*)\\s*</span>(\\s*)</li>"
+    "regex": "<li\\s*class=\"easysite-article-li\">\\s*<p\\s*class=\"article-title\">\\s*<a\\s*href=\"(.*/(.*?).htm)\""
   },
   {
     "name": "龙华区住建局",
