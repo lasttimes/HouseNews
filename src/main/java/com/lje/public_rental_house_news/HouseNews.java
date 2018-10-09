@@ -76,6 +76,7 @@ public class HouseNews {
             logger.error("checkLatestUpdateTime: pathInfoList null");
             return;
         }
+        logger.info("pathInfoList:" + pathInfoList);
         for (PathInfo pathInfo : pathInfoList) {
             // 查询最后更新时间
             AVObject o = findAVObjectEquals(TABLE_NAME,COL_ORGANIZE_NAME,pathInfo.name);
@@ -156,6 +157,7 @@ public class HouseNews {
     }
 
     public static void main(String... args) {
+        checkLatestUpdateTime();
     }
 
     static class PathInfo {
