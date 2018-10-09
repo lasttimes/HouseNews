@@ -6,12 +6,12 @@ import com.avos.avoscloud.*;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -88,7 +88,7 @@ public class HouseNews {
             }
 
             boolean needUpdate = dateTime.plusHours(1).isBefore(LocalDateTime.now());
-            logger.info("checkLatestUpdateTime: [%s] at %s , %s", pathInfo.name, dateTime, needUpdate ? " Need Update" : " need no Update");
+            logger.printf(Level.INFO, "checkLatestUpdateTime: [%s] at %s , %s", pathInfo.name, dateTime, needUpdate ? " Need Update" : " need no Update");
             if (!needUpdate) {
                 return;
             }
@@ -116,7 +116,7 @@ public class HouseNews {
             }
         }
         if (pathInfo == null) {
-            logger.error("getLatestNews: pathName[%s] not found", pathName);
+            logger.error("getLatestNews: pathName[" + pathName + "] not found");
             return;
         }
 
