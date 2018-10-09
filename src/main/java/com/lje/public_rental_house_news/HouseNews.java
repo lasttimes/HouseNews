@@ -25,9 +25,6 @@ public class HouseNews {
 
     private static final OkHttpClient sClient = new OkHttpClient();
 
-    private static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ISO_DATE_TIME;
-
-
     private static final String TABLE_NAME = "LatestUpdate";
     private static final String COL_ORGANIZE_NAME = "organizeName";
     private static final String COL_NEWS_ID = "newsId";
