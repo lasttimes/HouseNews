@@ -142,10 +142,9 @@ public class HouseNews {
         logger.info("push message:" + message);
     }
 
-    private static AVObject findAVObjectEquals(String className, String column, Object equalsValue) {
+    private static AVObject findAVObjectEquals(String className, String key, Object equalsValue) {
         AVQuery<AVObject> query = new AVQuery<>(className);
-        query.whereEqualTo(column, equalsValue);
-        query.limit(1);
+        query.whereEqualTo(key, equalsValue);
         try {
             List<AVObject> list = query.find();
             if (list != null && list.size() > 0) {
