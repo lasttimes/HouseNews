@@ -30,8 +30,6 @@ public class AppInitListener implements ServletContextListener {
   @Override
   public void contextInitialized(ServletContextEvent arg0) {
     logger.info("LeanEngine app init.");
-    // 注册子类化
-    AVObject.registerSubclass(Todo.class);
 
     if ("development".equals(appEnv) && "true".equals(haveStaging) || "stage".equals(appEnv)) {
       AVCloud.setProductionMode(false);
@@ -43,6 +41,6 @@ public class AppInitListener implements ServletContextListener {
     // 打开 debug 日志
     // AVOSCloud.setDebugLogEnabled(true);
     // 向云引擎注册云函数
-    LeanEngine.register(Cloud.class);
+    LeanEngine.register(HouseNews.class);
   }
 }
