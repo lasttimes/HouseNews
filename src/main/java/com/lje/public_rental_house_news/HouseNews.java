@@ -28,6 +28,7 @@ public class HouseNews {
     private static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ISO_DATE_TIME;
 
 
+    private static final String TABLE_NAME = "LatestUpdate";
     private static final String COL_ORGANIZE_NAME = "organizeName";
     private static final String COL_NEWS_ID = "newsId";
 
@@ -132,7 +133,7 @@ public class HouseNews {
             List<AVObject> list = query.find();
             AVObject o;
             if (list == null || list.size() == 0) {
-                o = new AVObject();
+                o = new AVObject(TABLE_NAME);
                 o.put(COL_ORGANIZE_NAME, pathName);
             } else {
                 o = list.get(0);
