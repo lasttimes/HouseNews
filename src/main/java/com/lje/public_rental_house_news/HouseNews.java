@@ -82,7 +82,7 @@ public class HouseNews {
             // 查询最后更新时间
             AVQuery<AVObject> query = new AVQuery<>("LatestUpdate");
             query.whereEqualTo(COL_ORGANIZE_NAME, pathInfo.name);
-            try{
+            try {
                 List<AVObject> list = query.find();
                 LocalDateTime dateTime;
                 if (list == null || list.size() == 0) {
@@ -101,7 +101,7 @@ public class HouseNews {
                         avE.printStackTrace();
                     }
                 }
-            }catch (AVException e){
+            } catch (AVException e) {
                 e.printStackTrace();
             }
         }
@@ -127,19 +127,22 @@ public class HouseNews {
         }
 
         AVQuery<AVObject> query = new AVQuery<>("LatestUpdate");
-        query.whereEqualTo("o", pathInfo.name);
+        query.whereEqualTo(COL_ORGANIZE_NAME, pathInfo.name);
         try {
             List<AVObject> list = query.find();
+            AVObject o;
             if (list == null || list.size() == 0) {
-                return;
+                o = new AVObject();
+                o.put(COL_ORGANIZE_NAME, pathName);
+            } else {
+                o = list.get(0);
             }
-            AVObject o = list.get(0);
             String id = o.getString(COL_NEWS_ID);
             NewsInfo newsInfo = getLatestNewsInfo(pathInfo, id);
             if (newsInfo == null) {
                 return;
             }
-            o.put(COL_NEWS_ID,newsInfo.id);
+            o.put(COL_NEWS_ID, newsInfo.id);
             o.saveInBackground();
             logger.info("newsInfo:" + newsInfo);
             AVPush push = new AVPush();
