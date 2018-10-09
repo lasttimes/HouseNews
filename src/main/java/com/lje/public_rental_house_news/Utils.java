@@ -19,19 +19,21 @@ class Utils {
         mapper = new ObjectMapper(jf);
     }
 
-    private static final String PROPS_FILE_NAME = "houseNews.props";
-
-    static void saveProp(Properties props){
-        try (OutputStream out = new FileOutputStream(PROPS_FILE_NAME)) {
+    static void saveProp(Properties props,String fileName){
+        try (OutputStream out = new FileOutputStream(fileName)) {
             props.store(out, null);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    static Properties loadProp() {
+    static Properties loadProp(String fileName) {
         Properties props = new Properties();
-        try (InputStream in = new FileInputStream(PROPS_FILE_NAME)) {
+        File f = new File(fileName);
+        if (!f.exists()){
+            return props;
+        }
+        try (InputStream in = new FileInputStream(f)) {
             props.load(in);
         } catch (Exception e) {
             e.printStackTrace();
