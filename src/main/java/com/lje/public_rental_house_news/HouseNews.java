@@ -93,15 +93,14 @@ public class HouseNews {
                     Date d = o.getUpdatedAt();
                     dateTime = LocalDateTime.ofInstant(d.toInstant(), ZoneId.systemDefault());
                 }
-                logger.info("checkLatestUpdateTime: " + pathInfo.name + " " + dateTime);
-                if (dateTime.plusHours(1).isBefore(LocalDateTime.now())) {
-                    Map<String, String> params = Collections.singletonMap("pathName", pathInfo.name);
-                    try {
-                        AVCloud.callFunction("getLatestNews", params);
-                    } catch (AVException avE) {
-                        avE.printStackTrace();
-                    }
+
+                boolean needUpdate = dateTime.plusHours(1).isBefore(LocalDateTime.now());
+                logger.info("checkLatestUpdateTime: [%s] at %s , %s", pathInfo.name, dateTime, needUpdate ? " Need Update" : " need no Update");
+                if (!needUpdate) {
+                    return;
                 }
+                Map<String, String> params = Collections.singletonMap("pathName", pathInfo.name);
+                AVCloud.callFunction("getLatestNews", params);
             } catch (AVException e) {
                 e.printStackTrace();
             }
@@ -109,7 +108,7 @@ public class HouseNews {
     }
 
     @EngineFunction("getLatestNews")
-    public static void getLatestNews(@EngineFunctionParam("pathName") String pathName) {
+    public static void getLatestNews(@EngineFunctionParam("pathName") String pathName) throws AVException {
         List<PathInfo> pathInfoList = Utils.loadPathList();
         if (pathInfoList == null) {
             logger.error("checkLatestUpdateTime: pathInfoList null");
@@ -129,32 +128,27 @@ public class HouseNews {
 
         AVQuery<AVObject> query = new AVQuery<>("LatestUpdate");
         query.whereEqualTo(COL_ORGANIZE_NAME, pathInfo.name);
-        try {
-            List<AVObject> list = query.find();
-            AVObject o;
-            if (list == null || list.size() == 0) {
-                o = new AVObject(TABLE_NAME);
-                o.put(COL_ORGANIZE_NAME, pathName);
-            } else {
-                o = list.get(0);
-            }
-            String id = o.getString(COL_NEWS_ID);
-            NewsInfo newsInfo = getLatestNewsInfo(pathInfo, id);
-            if (newsInfo == null) {
-                return;
-            }
-            o.put(COL_NEWS_ID, newsInfo.id);
-            o.saveInBackground();
-            logger.info("newsInfo:" + newsInfo);
-            AVPush push = new AVPush();
-            String message = pathName + "有新的公告";
-            push.setMessage(message);
-            push.sendInBackground();
-            logger.info("push message:" + message);
-
-        } catch (AVException e) {
-            e.printStackTrace();
+        List<AVObject> list = query.find();
+        AVObject o;
+        if (list == null || list.size() == 0) {
+            o = new AVObject(TABLE_NAME);
+            o.put(COL_ORGANIZE_NAME, pathName);
+        } else {
+            o = list.get(0);
         }
+        String id = o.getString(COL_NEWS_ID);
+        NewsInfo newsInfo = getLatestNewsInfo(pathInfo, id);
+        if (newsInfo == null) {
+            return;
+        }
+        o.put(COL_NEWS_ID, newsInfo.id);
+        o.saveInBackground();
+        logger.info("newsInfo:" + newsInfo);
+        AVPush push = new AVPush();
+        String message = pathName + "有新的公告";
+        push.setMessage(message);
+        push.sendInBackground();
+        logger.info("push message:" + message);
     }
 
     public static void main(String... args) {
