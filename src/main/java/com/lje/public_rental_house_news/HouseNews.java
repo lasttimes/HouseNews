@@ -8,7 +8,6 @@ import com.avos.avoscloud.AVPush;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import org.apache.commons.codec.binary.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -211,16 +210,12 @@ public class HouseNews {
 
     static class NewsInfo implements Comparable<NewsInfo> {
         String id;
-        String title;
-        String date;
         String href;
 
         @Override
         public String toString() {
             return "NewsInfo{" +
                     "id='" + id + '\'' +
-                    ", title='" + title + '\'' +
-                    ", date='" + date + '\'' +
                     ", href='" + href + '\'' +
                     '}';
         }
