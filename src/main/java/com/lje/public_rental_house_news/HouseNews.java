@@ -78,6 +78,7 @@ public class HouseNews {
         }
         logger.info("pathInfoList:" + pathInfoList);
         for (PathInfo pathInfo : pathInfoList) {
+            logger.info("pathInfo:" + pathInfo.name);
             // 查询最后更新时间
             AVObject o = findAVObjectEquals(TABLE_NAME,COL_ORGANIZE_NAME,pathInfo.name);
             LocalDateTime dateTime;
