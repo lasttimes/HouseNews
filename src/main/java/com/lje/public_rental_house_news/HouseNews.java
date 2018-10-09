@@ -92,7 +92,7 @@ public class HouseNews {
             boolean needUpdate = dateTime.plusHours(1).isBefore(LocalDateTime.now());
             logger.printf(Level.INFO, "checkLatestUpdateTime: [%s] at %s , %s", pathInfo.name, dateTime, needUpdate ? " Need Update" : " need no Update");
             if (!needUpdate) {
-                return;
+                continue;
             }
             Map<String, String> params = Collections.singletonMap("pathName", pathInfo.name);
             try {
