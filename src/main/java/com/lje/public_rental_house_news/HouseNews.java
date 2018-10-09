@@ -78,25 +78,22 @@ public class HouseNews {
         }
         for (PathInfo pathInfo : pathInfoList) {
             // 查询最后更新时间
-            AVQuery<AVObject> query = new AVQuery<>("LatestUpdate");
-            query.whereEqualTo(COL_ORGANIZE_NAME, pathInfo.name);
-            try {
-                List<AVObject> list = query.find();
-                LocalDateTime dateTime;
-                if (list == null || list.size() == 0) {
-                    dateTime = LocalDateTime.MIN;
-                } else {
-                    AVObject o = list.get(0);
-                    Date d = o.getUpdatedAt();
-                    dateTime = LocalDateTime.ofInstant(d.toInstant(), ZoneId.systemDefault());
-                }
+            AVObject o = findAVObjectEquals(TABLE_NAME,COL_ORGANIZE_NAME,pathInfo.name);
+            LocalDateTime dateTime;
+            if (o == null) {
+                dateTime = LocalDateTime.MIN;
+            } else {
+                Date d = o.getUpdatedAt();
+                dateTime = LocalDateTime.ofInstant(d.toInstant(), ZoneId.systemDefault());
+            }
 
-                boolean needUpdate = dateTime.plusHours(1).isBefore(LocalDateTime.now());
-                logger.info("checkLatestUpdateTime: [%s] at %s , %s", pathInfo.name, dateTime, needUpdate ? " Need Update" : " need no Update");
-                if (!needUpdate) {
-                    return;
-                }
-                Map<String, String> params = Collections.singletonMap("pathName", pathInfo.name);
+            boolean needUpdate = dateTime.plusHours(1).isBefore(LocalDateTime.now());
+            logger.info("checkLatestUpdateTime: [%s] at %s , %s", pathInfo.name, dateTime, needUpdate ? " Need Update" : " need no Update");
+            if (!needUpdate) {
+                return;
+            }
+            Map<String, String> params = Collections.singletonMap("pathName", pathInfo.name);
+            try {
                 AVCloud.callFunction("getLatestNews", params);
             } catch (AVException e) {
                 e.printStackTrace();
@@ -105,7 +102,7 @@ public class HouseNews {
     }
 
     @EngineFunction("getLatestNews")
-    public static void getLatestNews(@EngineFunctionParam("pathName") String pathName) throws AVException {
+    public static void getLatestNews(@EngineFunctionParam("pathName") String pathName) {
         List<PathInfo> pathInfoList = Utils.loadPathList();
         if (pathInfoList == null) {
             logger.error("checkLatestUpdateTime: pathInfoList null");
@@ -123,15 +120,10 @@ public class HouseNews {
             return;
         }
 
-        AVQuery<AVObject> query = new AVQuery<>("LatestUpdate");
-        query.whereEqualTo(COL_ORGANIZE_NAME, pathInfo.name);
-        List<AVObject> list = query.find();
-        AVObject o;
-        if (list == null || list.size() == 0) {
+        AVObject o = findAVObjectEquals(TABLE_NAME,COL_ORGANIZE_NAME,pathInfo.name);
+        if (o == null) {
             o = new AVObject(TABLE_NAME);
             o.put(COL_ORGANIZE_NAME, pathName);
-        } else {
-            o = list.get(0);
         }
         String id = o.getString(COL_NEWS_ID);
         NewsInfo newsInfo = getLatestNewsInfo(pathInfo, id);
@@ -146,6 +138,21 @@ public class HouseNews {
         push.setMessage(message);
         push.sendInBackground();
         logger.info("push message:" + message);
+    }
+
+    private static AVObject findAVObjectEquals(String className, String column, Object equalsValue) {
+        AVQuery<AVObject> query = new AVQuery<>(className);
+        query.whereEqualTo(column, equalsValue);
+        query.limit(1);
+        try {
+            List<AVObject> list = query.find();
+            if (list != null && list.size() > 0) {
+                return list.get(0);
+            }
+        } catch (AVException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static void main(String... args) {
