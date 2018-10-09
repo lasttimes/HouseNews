@@ -167,6 +167,13 @@ public class HouseNews {
         NewsInfo newsInfo = getLatestNewsInfo(pathInfo, latestIdProps);
         if (newsInfo != null){
             logger.info("newsInfo:" + newsInfo);
+
+            AVPush push = new AVPush();
+            String message = pathName+"有新的公告";
+            push.setMessage(message);
+            push.sendInBackground();
+            logger.info("push message:" + message);
+
             latestIdProps = Utils.loadProp(LATEST_ID_PROPS_NAME);
             latestIdProps.setProperty(pathName,newsInfo.id);
             Utils.saveProp(latestIdProps,LATEST_ID_PROPS_NAME);
