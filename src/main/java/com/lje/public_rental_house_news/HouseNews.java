@@ -54,20 +54,6 @@ public class HouseNews {
         return null;
     }
 
-    private static String getHtmlBodyText(String url) {
-        try {
-            Request request = new Request.Builder()
-                    .url(url)
-                    .build();
-
-            Response response = sClient.newCall(request).execute();
-            return response.body() != null ? response.body().string() : null;
-        } catch (Exception e) {
-            logger.warn(" request " + url + " " + e.getMessage());
-            return null;
-        }
-    }
-
     // 从配置文件读取上次成功更新时间，如是超出1小时，则再次请求更新
     @EngineFunction("checkLatestUpdateTime")
     public static void checkLatestUpdateTime() {
@@ -78,7 +64,7 @@ public class HouseNews {
         }
         for (PathInfo pathInfo : pathInfoList) {
             // 查询最后更新时间
-            AVObject o = findAVObjectEquals(TABLE_NAME, COL_ORGANIZE_NAME, pathInfo.name);
+            AVObject o = findAVObjectEquals(pathInfo.name);
             LocalDateTime dateTime;
             if (o == null) {
                 dateTime = LocalDateTime.MIN;
@@ -120,7 +106,7 @@ public class HouseNews {
             return;
         }
 
-        AVObject o = findAVObjectEquals(TABLE_NAME, COL_ORGANIZE_NAME, pathInfo.name);
+        AVObject o = findAVObjectEquals(pathInfo.name);
         if (o == null) {
             o = new AVObject(TABLE_NAME);
             o.put(COL_ORGANIZE_NAME, pathName);
@@ -140,11 +126,23 @@ public class HouseNews {
         logger.info("push message:" + message);
     }
 
-    private static AVObject findAVObjectEquals(String className, String key, Object equalsValue) {
-        AVQuery<AVObject> query = new AVQuery<>(className);
-        if (key != null && equalsValue != null) {
-            query.whereEqualTo(key, equalsValue);
+    private static String getHtmlBodyText(String url) {
+        try {
+            Request request = new Request.Builder()
+                    .url(url)
+                    .build();
+
+            Response response = sClient.newCall(request).execute();
+            return response.body() != null ? response.body().string() : null;
+        } catch (Exception e) {
+            logger.warn(" request " + url + " " + e.getMessage());
+            return null;
         }
+    }
+
+    private static AVObject findAVObjectEquals(Object equalsValue) {
+        AVQuery<AVObject> query = new AVQuery<>(HouseNews.TABLE_NAME);
+        query.whereEqualTo(HouseNews.COL_ORGANIZE_NAME, equalsValue);
         try {
             List<AVObject> list = query.find();
             if (list != null && list.size() > 0) {
