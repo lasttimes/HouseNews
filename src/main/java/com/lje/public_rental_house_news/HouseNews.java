@@ -135,9 +135,11 @@ public class HouseNews {
                     .build();
 
             Response response = sClient.newCall(request).execute();
-            return response.body() != null ? response.body().string() : null;
+            String body = response.body() != null ? response.body().string() : null;
+            logger.warn("request succeed:" + url);
+            return body;
         } catch (Exception e) {
-            logger.warn(" request " + url + " " + e.getMessage());
+            logger.warn(e.getMessage() + " " + url);
             return null;
         }
     }
