@@ -26,6 +26,7 @@ public class HouseNews {
     private static final String TABLE_NAME = "LatestUpdate";
     private static final String COL_ORGANIZE_NAME = "organizeName";
     private static final String COL_NEWS_ID = "newsId";
+    private static final String COL_TIME = "time";
 
     // 查找对应 html 中的 id ,对比保存的上一次最新id，
     // 如果没有保存记录，或者新id 大于保存id，返回对应 NewsInfo
@@ -70,7 +71,7 @@ public class HouseNews {
             if (o == null) {
                 dateTime = LocalDateTime.MIN;
             } else {
-                Date d = o.getUpdatedAt();
+                Date d = o.getDate(COL_TIME);
                 dateTime = LocalDateTime.ofInstant(d.toInstant(), ZoneId.systemDefault());
             }
 
@@ -116,7 +117,10 @@ public class HouseNews {
         String id = o.getString(COL_NEWS_ID);
         NewsInfo newsInfo = getLatestNewsInfo(pathInfo, id);
         logger.info("newsInfo:" + newsInfo);
+        Date now = new Date();
+        o.put(COL_NEWS_ID, now);
         if (newsInfo == null) {
+            o.saveInBackground();
             return;
         }
         o.put(COL_NEWS_ID, newsInfo.id);
