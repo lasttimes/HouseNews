@@ -128,7 +128,7 @@ public class HouseNews {
             o.saveInBackground();
             return;
         }
-        o.put(COL_TIME, newsInfo.id);
+        o.put(COL_NEWS_ID, newsInfo.id);
         o.saveInBackground();
         AVPush push = new AVPush();
         String message = pathName + "有新的公告";
