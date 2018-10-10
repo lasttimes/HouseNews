@@ -122,12 +122,12 @@ public class HouseNews {
         NewsInfo newsInfo = getLatestNewsInfo(pathInfo, id);
         logger.info("newsInfo:" + newsInfo);
         Date now = new Date();
-        o.put(COL_NEWS_ID, now);
+        o.put(COL_TIME, now);
         if (newsInfo == null) {
             o.saveInBackground();
             return;
         }
-        o.put(COL_NEWS_ID, newsInfo.id);
+        o.put(COL_TIME, newsInfo.id);
         o.saveInBackground();
         AVPush push = new AVPush();
         String message = pathName + "有新的公告";
