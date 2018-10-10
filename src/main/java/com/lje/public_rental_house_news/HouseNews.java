@@ -72,7 +72,11 @@ public class HouseNews {
                 dateTime = LocalDateTime.MIN;
             } else {
                 Date d = o.getDate(COL_TIME);
-                dateTime = LocalDateTime.ofInstant(d.toInstant(), ZoneId.systemDefault());
+                if (d == null) {
+                    dateTime = LocalDateTime.MIN;
+                }else{
+                    dateTime = LocalDateTime.ofInstant(d.toInstant(), ZoneId.systemDefault());
+                }
             }
 
             boolean needUpdate = dateTime.plusHours(1).isBefore(LocalDateTime.now());
