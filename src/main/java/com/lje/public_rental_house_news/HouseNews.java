@@ -117,6 +117,7 @@ public class HouseNews {
         if (o == null) {
             o = new AVObject(TABLE_NAME);
             o.put(COL_ORGANIZE_NAME, pathName);
+            o.put(COL_TIME,new Date());
         }
         String id = o.getString(COL_NEWS_ID);
         NewsInfo newsInfo = getLatestNewsInfo(pathInfo, id);
