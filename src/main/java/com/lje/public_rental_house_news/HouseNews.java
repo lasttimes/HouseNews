@@ -23,7 +23,7 @@ public class HouseNews {
 
     private static Logger logger = LogManager.getLogger();
 
-    private static final String TABLE_NAME = "LatestUpdate";
+    private static final String TABLE_NAME = "LatestNewsInfo";
     private static final String COL_ORGANIZE_NAME = "organizeName";
     private static final String COL_NEWS_ID = "newsId";
     private static final String COL_TIME = "time";
