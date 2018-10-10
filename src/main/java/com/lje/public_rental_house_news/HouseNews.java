@@ -3,9 +3,6 @@ package com.lje.public_rental_house_news;
 import cn.leancloud.EngineFunction;
 import cn.leancloud.EngineFunctionParam;
 import com.avos.avoscloud.*;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,21 +14,28 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Test
+ * 在不同机构，在 path.json 中配置有地址及正则。
+ * 根据正则查询最新的公告的 id
+ * 如果 id 有更新，认为有新的公告，发送通知
  */
 public class HouseNews {
 
     private static Logger logger = LogManager.getLogger();
 
     private static final String TABLE_NAME = "LatestNewsInfo";
+    // 机构名，据此在 path.json 查询对应机构的地址及正则
     private static final String COL_ORGANIZE_NAME = "organizeName";
+    // 页面id，据此判断是否有新的公告
     private static final String COL_NEWS_ID = "newsId";
-    private static final String COL_TIME = "time";
+    // 上次查询页面的时间
+    private static final String COL_TIME = "lastUpdateHtmlTime";
+    // 上次发送 push 时间
+    private static final String COL_LAST_PUSH_TIME = "lastPushTime";
 
     // 查找对应 html 中的 id ,对比保存的上一次最新id，
     // 如果没有保存记录，或者新id 大于保存id，返回对应 NewsInfo
     private static NewsInfo getLatestNewsInfo(PathInfo pathInfo, String lastId) {
-        String htmlBody = Utils.getHtmlBodyText(logger,pathInfo.url);
+        String htmlBody = Utils.getHtmlBodyText(logger, pathInfo.url);
         if (htmlBody == null) {
             return null;
         }
@@ -74,7 +78,7 @@ public class HouseNews {
                 Date d = o.getDate(COL_TIME);
                 if (d == null) {
                     dateTime = LocalDateTime.MIN;
-                }else{
+                } else {
                     dateTime = LocalDateTime.ofInstant(d.toInstant(), ZoneId.systemDefault());
                 }
             }
@@ -117,7 +121,7 @@ public class HouseNews {
         if (o == null) {
             o = new AVObject(TABLE_NAME);
             o.put(COL_ORGANIZE_NAME, pathName);
-            o.put(COL_TIME,new Date());
+            o.put(COL_TIME, new Date());
         }
         String id = o.getString(COL_NEWS_ID);
         NewsInfo newsInfo = getLatestNewsInfo(pathInfo, id);
@@ -129,6 +133,7 @@ public class HouseNews {
             return;
         }
         o.put(COL_NEWS_ID, newsInfo.id);
+        o.put(COL_LAST_PUSH_TIME, now);
         o.saveInBackground();
         AVPush push = new AVPush();
         String message = pathName + "有新的公告";
