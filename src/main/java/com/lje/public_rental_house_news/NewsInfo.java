@@ -1,0 +1,46 @@
+package com.lje.public_rental_house_news;
+
+import java.util.regex.Matcher;
+
+public class NewsInfo implements Comparable<NewsInfo> {
+    String id;
+    @SuppressWarnings("WeakerAccess")
+    String href;
+    String title;
+
+    private NewsInfo(String href, String id, String title) {
+        this.href = href;
+        this.id = id;
+        this.title = title;
+    }
+
+    @Override
+    public String toString() {
+        return "NewsInfo{" +
+                "id='" + id + '\'' +
+                ", href='" + href + '\'' +
+                ", title='" + title + '\'' +
+                '}';
+    }
+
+    @Override
+    public int compareTo(NewsInfo o) {
+        return this.id.compareTo(o.id);
+    }
+
+    public static Creator getCreator(String name) {
+        if ("baoan".equals(name)) {
+            return CREATOR_BAOAN;
+        }
+        return CREATOR_DEFAULT;
+    }
+
+    public interface Creator {
+        NewsInfo create(Matcher matcher);
+    }
+
+    private static Creator CREATOR_DEFAULT = matcher -> new NewsInfo(matcher.group(1), matcher.group(2), matcher.group(3));
+
+
+    private static Creator CREATOR_BAOAN = matcher -> new NewsInfo(matcher.group(2), matcher.group(3), matcher.group(1));
+}

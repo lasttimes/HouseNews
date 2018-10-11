@@ -43,9 +43,7 @@ public class HouseNews {
         Matcher m = pattern.matcher(htmlBody);
 
         if (m.find()) {
-            NewsInfo info = new NewsInfo();
-            info.href = m.group(1);
-            info.id = m.group(2);
+            NewsInfo info = NewsInfo.getCreator(pathInfo.creator).create(m);
             if (info.id == null) {
                 return null;
             }
@@ -136,7 +134,7 @@ public class HouseNews {
         o.put(COL_LAST_PUSH_TIME, now);
         o.saveInBackground();
         AVPush push = new AVPush();
-        String message = pathName + "有新的公告";
+        String message = pathName + "有新的公告:" + newsInfo.title;
         push.setMessage(message);
         push.sendInBackground();
         logger.info("push message:" + message);
@@ -158,24 +156,5 @@ public class HouseNews {
 
     public static void main(String... args) {
         checkLatestUpdateTime();
-    }
-
-
-    static class NewsInfo implements Comparable<NewsInfo> {
-        String id;
-        String href;
-
-        @Override
-        public String toString() {
-            return "NewsInfo{" +
-                    "id='" + id + '\'' +
-                    ", href='" + href + '\'' +
-                    '}';
-        }
-
-        @Override
-        public int compareTo(NewsInfo o) {
-            return this.id.compareTo(o.id);
-        }
     }
 }

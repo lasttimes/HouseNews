@@ -1,6 +1,7 @@
-import com.lje.public_rental_house_news.HouseNews;
+import com.lje.public_rental_house_news.NewsInfo;
 import com.lje.public_rental_house_news.PathInfo;
 import com.lje.public_rental_house_news.Utils;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
@@ -30,9 +31,14 @@ public class UnitTest {
             Matcher m = pattern.matcher(htmlBody);
             logger.info(pathInfo.name + " url:" + pathInfo.url);
             Assert.assertTrue(m.find());
-            String id = m.group(2);
-            logger.info("find id:" + id);
+            NewsInfo info = NewsInfo.getCreator(pathInfo.creator).create(m);
+            logger.info("newsInfo:" + info);
         }
+    }
+
+    @Test
+    public void temp() {
+
     }
 
 }
