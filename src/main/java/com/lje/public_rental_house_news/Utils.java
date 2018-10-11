@@ -77,8 +77,6 @@ public class Utils {
         message.setText(content);
 
         Transport.send(message);
-
-        System.out.println("Done");
     }
 
     public static String getHtmlBodyText(Logger logger, String url) {
