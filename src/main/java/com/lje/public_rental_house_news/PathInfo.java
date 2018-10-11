@@ -1,7 +1,5 @@
 package com.lje.public_rental_house_news;
 
-import com.sun.istack.internal.Nullable;
-
 public class PathInfo {
     public PathInfo() {
 
@@ -14,7 +12,6 @@ public class PathInfo {
     @SuppressWarnings("WeakerAccess")
     public String regex;
     @SuppressWarnings("WeakerAccess")
-    @Nullable
     public String creator;
 
     @Override
