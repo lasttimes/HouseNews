@@ -7,6 +7,8 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
@@ -22,7 +24,7 @@ public class HouseNews {
 
     private static Logger logger = LogManager.getLogger();
 
-    private static final String TABLE_NAME = "LatestNewsInfo";
+    private static final String CLASS_NAME_LATEST_NEWS = "LatestNewsInfo";
     // 机构名，据此在 path.json 查询对应机构的地址及正则
     private static final String COL_ORGANIZE_NAME = "organizeName";
     // 页面id，据此判断是否有新的公告
@@ -117,7 +119,7 @@ public class HouseNews {
 
         AVObject o = findAVObjectEquals(pathInfo.name);
         if (o == null) {
-            o = new AVObject(TABLE_NAME);
+            o = new AVObject(CLASS_NAME_LATEST_NEWS);
             o.put(COL_ORGANIZE_NAME, pathName);
             o.put(COL_TIME, new Date());
         }
@@ -130,18 +132,39 @@ public class HouseNews {
             o.saveInBackground();
             return;
         }
+
+        // 发送推送
         o.put(COL_NEWS_ID, newsInfo.id);
         o.put(COL_LAST_PUSH_TIME, now);
         o.saveInBackground();
+
+        sendPush(pathInfo,newsInfo);
+        sendMail(pathInfo,newsInfo);
+    }
+
+    private static void sendPush(PathInfo pathInfo,NewsInfo newsInfo){
         AVPush push = new AVPush();
-        String message = pathName + ":" + newsInfo.title;
+        String message = pathInfo.name + ":" + newsInfo.title;
         push.setMessage(message);
         push.sendInBackground();
-        logger.info("push message:" + message);
+    }
+
+    private static void sendMail(PathInfo pathInfo,NewsInfo newsInfo){
+        try {
+
+            Properties props = new Properties();
+            Utils.loadProperties(props, "mail.properties");
+            String toAddress = props.getProperty("toAddress");
+            String message = pathInfo.name + ":" + newsInfo.title;
+            String content = pathInfo.url;
+            Utils.sendMail(toAddress, message, content);
+        } catch (IOException | MessagingException e) {
+            e.printStackTrace();
+        }
     }
 
     private static AVObject findAVObjectEquals(Object equalsValue) {
-        AVQuery<AVObject> query = new AVQuery<>(HouseNews.TABLE_NAME);
+        AVQuery<AVObject> query = new AVQuery<>(HouseNews.CLASS_NAME_LATEST_NEWS);
         query.whereEqualTo(HouseNews.COL_ORGANIZE_NAME, equalsValue);
         try {
             List<AVObject> list = query.find();

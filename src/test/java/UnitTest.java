@@ -7,6 +7,8 @@ import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,8 +39,8 @@ public class UnitTest {
     }
 
     @Test
-    public void temp() {
-
+    public void checkMailOK() throws IOException, MessagingException {
+        Utils.sendMail("lasttimes@163.com","subjct","content");
     }
 
 }
