@@ -83,9 +83,10 @@ public class HouseNews {
                 }
             }
 
-            boolean needUpdate = dateTime.plusMinutes(20).isBefore(LocalDateTime.now());
-            logger.printf(Level.INFO, "checkLatestUpdateTime: [%s] at %s , %s", pathInfo.name, dateTime, needUpdate ? " Need Update" : " need no Update");
-            if (!needUpdate) {
+            boolean needUpdate = dateTime.plusMinutes(30).isBefore(LocalDateTime.now());
+            if (needUpdate){
+                logger.printf(Level.INFO, "checkLatestUpdateTime: [%s] at %s ,  Need Update", pathInfo.name, dateTime);
+            }else{
                 continue;
             }
             Map<String, String> params = Collections.singletonMap("pathName", pathInfo.name);
