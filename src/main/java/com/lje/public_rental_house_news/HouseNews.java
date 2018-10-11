@@ -156,7 +156,7 @@ public class HouseNews {
             Utils.loadProperties(props, "mail.properties");
             String toAddress = props.getProperty("toAddress");
             String message = pathInfo.name + ":" + newsInfo.title;
-            String content = pathInfo.url;
+            String content = message + "\n" + pathInfo.url;
             Utils.sendMail(toAddress, message, content);
         } catch (IOException | MessagingException e) {
             e.printStackTrace();
