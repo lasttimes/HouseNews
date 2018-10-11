@@ -24,13 +24,17 @@ public class HouseNews {
 
     private static Logger logger = LogManager.getLogger();
 
+
+    // 刷新网站间隔时间, in ms
+    private static final int REFRESH_INTERVAL = 30;
+
     private static final String CLASS_NAME_LATEST_NEWS = "LatestNewsInfo";
     // 机构名，据此在 path.json 查询对应机构的地址及正则
     private static final String COL_ORGANIZE_NAME = "organizeName";
     // 页面id，据此判断是否有新的公告
     private static final String COL_NEWS_ID = "newsId";
     // 上次查询页面的时间
-    private static final String COL_TIME = "lastUpdateHtmlTime";
+    private static final String COL_LAST_UPDATE_TIME = "lastUpdateHtmlTime";
     // 上次发送 push 时间
     private static final String COL_LAST_PUSH_TIME = "lastPushTime";
 
@@ -75,15 +79,11 @@ public class HouseNews {
             if (o == null) {
                 dateTime = LocalDateTime.MIN;
             } else {
-                Date d = o.getDate(COL_TIME);
-                if (d == null) {
-                    dateTime = LocalDateTime.MIN;
-                } else {
-                    dateTime = LocalDateTime.ofInstant(d.toInstant(), ZoneId.systemDefault());
-                }
+                Date d = o.getDate(COL_LAST_UPDATE_TIME);
+                dateTime = LocalDateTime.ofInstant(d.toInstant(), ZoneId.systemDefault());
             }
 
-            boolean needUpdate = dateTime.plusMinutes(30).isBefore(LocalDateTime.now());
+            boolean needUpdate = dateTime.plusMinutes(REFRESH_INTERVAL).isBefore(LocalDateTime.now());
             if (needUpdate){
                 logger.printf(Level.INFO, "checkLatestUpdateTime: [%s] at %s ,  Need Update", pathInfo.name, dateTime);
             }else{
@@ -122,13 +122,13 @@ public class HouseNews {
         if (o == null) {
             o = new AVObject(CLASS_NAME_LATEST_NEWS);
             o.put(COL_ORGANIZE_NAME, pathName);
-            o.put(COL_TIME, new Date());
+            o.put(COL_LAST_UPDATE_TIME, new Date());
         }
         String id = o.getString(COL_NEWS_ID);
         NewsInfo newsInfo = getLatestNewsInfo(pathInfo, id);
         logger.info("newsInfo:" + newsInfo);
         Date now = new Date();
-        o.put(COL_TIME, now);
+        o.put(COL_LAST_UPDATE_TIME, now);
         if (newsInfo == null) {
             o.saveInBackground();
             return;
