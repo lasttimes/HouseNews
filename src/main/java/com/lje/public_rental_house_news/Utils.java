@@ -1,5 +1,6 @@
 package com.lje.public_rental_house_news;
 
+import com.avos.avoscloud.AVObject;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -103,6 +104,10 @@ public class Utils {
             if (logger != null) {
                 logger.warn(e.getMessage() + " " + url);
             }
+            AVObject obj = new AVObject("ErrorLog");
+            obj.put("type","connect");
+            obj.put("message", url + " " + e.getMessage());
+            obj.saveInBackground();
             return null;
         }
     }

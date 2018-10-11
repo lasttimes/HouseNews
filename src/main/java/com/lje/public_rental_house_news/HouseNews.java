@@ -83,7 +83,7 @@ public class HouseNews {
                 }
             }
 
-            boolean needUpdate = dateTime.plusHours(1).isBefore(LocalDateTime.now());
+            boolean needUpdate = dateTime.plusMinutes(20).isBefore(LocalDateTime.now());
             logger.printf(Level.INFO, "checkLatestUpdateTime: [%s] at %s , %s", pathInfo.name, dateTime, needUpdate ? " Need Update" : " need no Update");
             if (!needUpdate) {
                 continue;
@@ -138,18 +138,18 @@ public class HouseNews {
         o.put(COL_LAST_PUSH_TIME, now);
         o.saveInBackground();
 
-        sendPush(pathInfo,newsInfo);
-        sendMail(pathInfo,newsInfo);
+        sendPush(pathInfo, newsInfo);
+        sendMail(pathInfo, newsInfo);
     }
 
-    private static void sendPush(PathInfo pathInfo,NewsInfo newsInfo){
+    private static void sendPush(PathInfo pathInfo, NewsInfo newsInfo) {
         AVPush push = new AVPush();
         String message = pathInfo.name + ":" + newsInfo.title;
         push.setMessage(message);
         push.sendInBackground();
     }
 
-    private static void sendMail(PathInfo pathInfo,NewsInfo newsInfo){
+    private static void sendMail(PathInfo pathInfo, NewsInfo newsInfo) {
         try {
 
             Properties props = new Properties();
