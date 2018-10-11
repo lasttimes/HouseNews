@@ -134,7 +134,7 @@ public class HouseNews {
         o.put(COL_LAST_PUSH_TIME, now);
         o.saveInBackground();
         AVPush push = new AVPush();
-        String message = pathName + "有新的公告:" + newsInfo.title;
+        String message = pathName + ":" + newsInfo.title;
         push.setMessage(message);
         push.sendInBackground();
         logger.info("push message:" + message);
