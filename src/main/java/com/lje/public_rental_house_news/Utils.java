@@ -10,6 +10,7 @@ import okhttp3.Response;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,9 +22,7 @@ import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import javax.mail.internet.*;
 
 public class Utils {
 
@@ -55,7 +54,15 @@ public class Utils {
         }
     }
 
-    public static void sendMail(String toAddress, String subject, String content) throws IOException, MessagingException {
+    /**
+     * 发送邮件
+     * @param toAddress 接收方邮件地址
+     * @param subject 邮件主题
+     * @param content　邮件内容(HTML格式)
+     * @throws IOException
+     * @throws MessagingException
+     */
+    public static void senHTMLdMail(String toAddress, String subject, String content) throws IOException, MessagingException {
         // 163 邮箱
         final Properties props = new Properties();
         loadProperties(props,"mail.properties");
@@ -69,12 +76,12 @@ public class Utils {
                     }
                 });
 
-        Message message = new MimeMessage(session);
+        MimeMessage message = new MimeMessage(session);
         message.setFrom(new InternetAddress(props.getProperty("username")));
         message.setRecipients(Message.RecipientType.TO,
                 InternetAddress.parse(toAddress));
         message.setSubject(subject);
-        message.setText(content);
+        message.setText(content,"UTF-8","HTML");
 
         Transport.send(message);
     }

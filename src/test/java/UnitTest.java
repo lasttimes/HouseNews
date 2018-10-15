@@ -1,7 +1,6 @@
 import com.lje.public_rental_house_news.NewsInfo;
 import com.lje.public_rental_house_news.PathInfo;
 import com.lje.public_rental_house_news.Utils;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
@@ -40,7 +39,7 @@ public class UnitTest {
 
     @Test
     public void checkMailOK() throws IOException, MessagingException {
-        Utils.sendMail("lasttimes@163.com","subjct","content");
+        Utils.senHTMLdMail("gongzufang_sz@163.com","subjct","content<a\">http://www.yantian.gov.cn/cn/zwgk/tzgg/</a>");
     }
 
 }

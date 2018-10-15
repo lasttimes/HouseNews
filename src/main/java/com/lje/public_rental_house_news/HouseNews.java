@@ -84,9 +84,9 @@ public class HouseNews {
             }
 
             boolean needUpdate = dateTime.plusMinutes(REFRESH_INTERVAL).isBefore(LocalDateTime.now());
-            if (needUpdate){
+            if (needUpdate) {
                 logger.printf(Level.INFO, "checkLatestUpdateTime: [%s] at %s ,  Need Update", pathInfo.name, dateTime);
-            }else{
+            } else {
                 continue;
             }
             Map<String, String> params = Collections.singletonMap("pathName", pathInfo.name);
@@ -157,8 +157,8 @@ public class HouseNews {
             Utils.loadProperties(props, "mail.properties");
             String toAddress = props.getProperty("toAddress");
             String message = pathInfo.name + "有新公告";
-            String content = pathInfo.name + ":" + newsInfo.title + "\n" + pathInfo.url;
-            Utils.sendMail(toAddress, message, content);
+            String content = String.format("%s:%s\n<a href=\"%s\">%s</a>", pathInfo.name, newsInfo.title, pathInfo.url, pathInfo.url);
+            Utils.senHTMLdMail(toAddress, message, content);
         } catch (IOException | MessagingException e) {
             e.printStackTrace();
         }
