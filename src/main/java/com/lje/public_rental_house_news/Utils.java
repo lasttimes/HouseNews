@@ -9,26 +9,26 @@ import okhttp3.Request;
 import okhttp3.Response;
 import org.apache.logging.log4j.Logger;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
-
-import java.io.UnsupportedEncodingException;
 import java.util.Properties;
-
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.*;
 
 public class Utils {
 
     private static ObjectMapper mapper;
 
     private static OkHttpClient sClient;
+
+    private static volatile List<PathInfo> PATH_INFO_LIST;
+
+    private static final Object PATH_INFO_LIST_LOCK = new Object();
 
     static {
         JsonFactory jf = new JsonFactory();
@@ -45,27 +45,32 @@ public class Utils {
     }
 
     public static List<PathInfo> loadPathList() {
-        File file = new File(Objects.requireNonNull(HouseNews.class.getClassLoader().getResource("path.json")).getFile());
-        try (InputStream in = new FileInputStream(file)) {
-            return mapper.readValue(in, mapper.getTypeFactory().constructCollectionType(List.class, PathInfo.class));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+        if (PATH_INFO_LIST == null) {
+            synchronized (PATH_INFO_LIST_LOCK) {
+                if (PATH_INFO_LIST == null) {
+                    File file = new File(Objects.requireNonNull(HouseNews.class.getClassLoader().getResource("path.json")).getFile());
+                    try (InputStream in = new FileInputStream(file)) {
+                        PATH_INFO_LIST = mapper.readValue(in, mapper.getTypeFactory().constructCollectionType(List.class, PathInfo.class));
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
         }
+        return PATH_INFO_LIST;
     }
 
     /**
      * 发送邮件
+     *
      * @param toAddress 接收方邮件地址
-     * @param subject 邮件主题
-     * @param content　邮件内容(HTML格式)
-     * @throws IOException
-     * @throws MessagingException
+     * @param subject   邮件主题
+     * @param content   　邮件内容(HTML格式)
      */
     public static void senHTMLdMail(String toAddress, String subject, String content) throws IOException, MessagingException {
         // 163 邮箱
         final Properties props = new Properties();
-        loadProperties(props,"mail.properties");
+        loadProperties(props, "mail.properties");
 
         Session session = Session.getInstance(props,
                 new javax.mail.Authenticator() {
@@ -81,7 +86,7 @@ public class Utils {
         message.setRecipients(Message.RecipientType.TO,
                 InternetAddress.parse(toAddress));
         message.setSubject(subject);
-        message.setText(content,"UTF-8","HTML");
+        message.setText(content, "UTF-8", "HTML");
 
         Transport.send(message);
     }
@@ -110,7 +115,7 @@ public class Utils {
                 logger.warn(e.getMessage() + " " + url);
             }
             AVObject obj = new AVObject("ErrorLog");
-            obj.put("type","connect");
+            obj.put("type", "connect");
             obj.put("message", url + " " + e.getMessage());
             obj.saveInBackground();
             return null;

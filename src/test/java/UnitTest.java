@@ -20,8 +20,6 @@ public class UnitTest {
     public void checkPattern() {
         List<PathInfo> pathInfoList = Utils.loadPathList();
 
-        Assert.assertNotNull(pathInfoList);
-
         for (PathInfo pathInfo : pathInfoList) {
             String htmlBody = Utils.getHtmlBodyText(logger, pathInfo.url);
             Pattern pattern = Pattern.compile(pathInfo.regex);

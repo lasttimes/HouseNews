@@ -68,10 +68,6 @@ public class HouseNews {
     public static void checkLatestUpdateTime() {
         List<PathInfo> pathInfoList = Utils.loadPathList();
         logger.info(">>> checkLatestUpdateTime");
-        if (pathInfoList == null) {
-            logger.error("checkLatestUpdateTime: pathInfoList null");
-            return;
-        }
         for (PathInfo pathInfo : pathInfoList) {
             // 查询最后更新时间
             AVObject o = findAVObjectEquals(pathInfo.name);
@@ -102,10 +98,6 @@ public class HouseNews {
     public static void getLatestNews(@EngineFunctionParam("pathName") String pathName) {
         logger.info(">>> getLatestNews pathName:" + pathName);
         List<PathInfo> pathInfoList = Utils.loadPathList();
-        if (pathInfoList == null) {
-            logger.error("checkLatestUpdateTime: pathInfoList null");
-            return;
-        }
         PathInfo pathInfo = null;
         for (PathInfo info : pathInfoList) {
             if (info.name.equals(pathName)) {
