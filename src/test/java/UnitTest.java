@@ -39,7 +39,9 @@ public class UnitTest {
 
     @Test
     public void checkMailOK() throws IOException, MessagingException {
-        Utils.senHTMLdMail("gongzufang_sz@163.com","subjct","content<a\">http://www.yantian.gov.cn/cn/zwgk/tzgg/</a>");
+        String url = "http://www.yantian.gov.cn/cn/zwgk/tzgg/";
+        String content = String.format("%s：%s<br/><a href=\"%s\">%s</a>", "盐田区", "关于征集2019年盐田区改革思路的公告 ", url, url);
+        Utils.senHTMLdMail("gongzufang_sz@163.com","subjct",content);
     }
 
 }

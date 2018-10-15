@@ -157,7 +157,7 @@ public class HouseNews {
             Utils.loadProperties(props, "mail.properties");
             String toAddress = props.getProperty("toAddress");
             String message = pathInfo.name + "有新公告";
-            String content = String.format("%s:%s\n<a href=\"%s\">%s</a>", pathInfo.name, newsInfo.title, pathInfo.url, pathInfo.url);
+            String content = String.format("%s<br/>%s<br><a href=\"%s\">%s</a>", pathInfo.name, newsInfo.title, pathInfo.url, pathInfo.url);
             Utils.senHTMLdMail(toAddress, message, content);
         } catch (IOException | MessagingException e) {
             e.printStackTrace();
