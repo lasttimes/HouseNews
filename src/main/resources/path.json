@@ -49,15 +49,5 @@
     "name": "坪山区住建局",
     "url": "http://www.szpsq.gov.cn/gbmxxgk/zfhjsj/jt/tzgg/",
     "regex": "<div\\s*class=\"item mb15 whiteBg clearfix\">\\s*<a\\s*href=\"(.*/(.*?).htm)\"\\s*>\\s*<strong.*?>(.*)</strong>"
-  },
-  {
-    "name": "盐田区",
-    "url": "http://www.yantian.gov.cn/cn/zwgk/tzgg/",
-    "regex": "<div\\s*class=\"news-item-temp1 whiteBg p20\">\\s*<a\\s*href=\"(.*/(.*?).htm)\"\\s*>\\s*<strong>\\s*(.*)\\s*</strong>"
-  },
-  {
-    "name": "大鹏新区",
-    "url": "http://www.dpxq.gov.cn/xxgk/xxgk/tzgg/",
-    "regex": "<li>\\s*<span\\s*class=\"name\">\\s*<a\\s*href=\"(.*/(.*?).htm)\"\\s*.*>(.*)</a>"
   }
 ]
