@@ -26,7 +26,8 @@ public class HouseNews {
 
 
     // 刷新网站间隔时间, in ms
-    private static final int REFRESH_INTERVAL = 30;
+    private static final int REFRESH_INTERVAL_IN_MS = 20;
+
 
     private static final String CLASS_NAME_LATEST_NEWS = "LatestNewsInfo";
     // 机构名，据此在 path.json 查询对应机构的地址及正则
@@ -79,7 +80,7 @@ public class HouseNews {
                 dateTime = LocalDateTime.ofInstant(d.toInstant(), ZoneId.systemDefault());
             }
 
-            boolean needUpdate = dateTime.plusMinutes(REFRESH_INTERVAL).isBefore(LocalDateTime.now());
+            boolean needUpdate = dateTime.plusMinutes(REFRESH_INTERVAL_IN_MS).isBefore(LocalDateTime.now());
             if (needUpdate) {
                 logger.printf(Level.INFO, "checkLatestUpdateTime: [%s] at %s ,  Need Update", pathInfo.name, dateTime);
             } else {
