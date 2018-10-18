@@ -114,11 +114,15 @@ public class Utils {
             if (logger != null) {
                 logger.warn(e.getMessage() + " " + url);
             }
-            AVObject obj = new AVObject("ErrorLog");
-            obj.put("type", "connect");
-            obj.put("message", url + " " + e.getMessage());
-            obj.saveInBackground();
+            addErrorLog("connect",url + " " + e.getMessage());
             return null;
         }
+    }
+
+    static void addErrorLog(String type, String message) {
+        AVObject obj = new AVObject("ErrorLog");
+        obj.put("type", type);
+        obj.put("message", message);
+        obj.saveInBackground();
     }
 }

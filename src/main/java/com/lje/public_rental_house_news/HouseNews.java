@@ -136,24 +136,40 @@ public class HouseNews {
         sendMail(pathInfo, newsInfo);
     }
 
+    // 发送推送，如果失败，保存到重试表
     private static void sendPush(PathInfo pathInfo, NewsInfo newsInfo) {
         AVPush push = new AVPush();
         String message = pathInfo.name + ":" + newsInfo.title;
         push.setMessage(message);
-        push.sendInBackground();
+        push.sendInBackground(new SendCallback() {
+            @Override
+            public void done(AVException e) {
+                if (e == null) {
+                    return;
+                }
+                Utils.addErrorLog("push", "msg:" + message + " e:" + e.getMessage());
+            }
+        });
     }
 
+    // 发送邮件，如果失败，保存到重试表
     private static void sendMail(PathInfo pathInfo, NewsInfo newsInfo) {
+        Properties props = new Properties();
         try {
-
-            Properties props = new Properties();
             Utils.loadProperties(props, "mail.properties");
-            String toAddress = props.getProperty("toAddress");
-            String message = pathInfo.name + "有新公告";
-            String content = String.format("%s<br/>%s<br><a href=\"%s\">%s</a>", pathInfo.name, newsInfo.title, pathInfo.url, pathInfo.url);
-            Utils.senHTMLdMail(toAddress, message, content);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Utils.addErrorLog("failed", "loadProperties error:" + e.getMessage());
+            return;
+        }
+        String toAddress = props.getProperty("toAddress");
+        String subject = pathInfo.name + "有新公告";
+        String content = String.format("%s<br/>%s<br><a href=\"%s\">%s</a>", pathInfo.name, newsInfo.title, pathInfo.url, pathInfo.url);
+        try {
+            Utils.senHTMLdMail(toAddress, subject, content);
         } catch (IOException | MessagingException e) {
             e.printStackTrace();
+            Utils.addErrorLog("mail", "subject:" + subject + " e:" + e.getMessage());
         }
     }
 
