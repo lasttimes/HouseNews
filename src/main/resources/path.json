@@ -10,9 +10,14 @@
     "regex": "<ul\\s*class=\"ftdt-list\">\\s*<li>\\s*<a\\s*href=\"(.*/(.*?)\\.htm)\"\\s*title=\"(.*?)\".*?<span>\\s*(.*)\\s*</span>(\\s*)</li>"
   },
   {
-    "name":"深圳市住房和建设局",
+    "name":"市住建局项目建设信息",
     "url":"http://www.szjs.gov.cn/csml/zfbz/xxgk/bzxm/?cid=122033",
     "regex": "<ul\\s*class=\"ftdt-list\">\\s*<li>\\s*<a\\s*href=\"(.*/(.*?)\\.pdf)\"\\s*title=\"(.*?)\".*?<span>\\s*(.*)\\s*</span>(\\s*)</li>"
+  },
+  {
+    "name":"市住建局住房保障",
+    "url":"http://www.szjs.gov.cn/csml/zcfg/xxgk/zcfg_1/zcfg/bzzf/index_22358.htm?cid=81063",
+    "regex": "<ul\\s*class=\"ftdt-list\">\\s*<li>\\s*<a\\s*href=\"(.*/(.*?)\\.htm)\"\\s*title=\"(.*?)\".*?<span>\\s*(.*)\\s*</span>(\\s*)</li>"
   },
   {
     "name": "南山区住建局",

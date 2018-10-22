@@ -41,5 +41,6 @@ public class AppInitListener implements ServletContextListener {
     // AVOSCloud.setDebugLogEnabled(true);
     // 向云引擎注册云函数
     LeanEngine.register(HouseNews.class);
+    LeanEngine.register(Jandan.class);
   }
 }
