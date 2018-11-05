@@ -21,7 +21,7 @@ public class HouseUnitTest {
         List<PathInfo> pathInfoList = Utils.loadPathList();
 
         for (PathInfo pathInfo : pathInfoList) {
-            String htmlBody = Utils.getHtmlBodyText(logger, pathInfo.url);
+            String htmlBody = Utils.getHtmlBodyText(logger, pathInfo.url,pathInfo.charset);
             Pattern pattern = Pattern.compile(pathInfo.regex);
             if (htmlBody == null) {
                 logger.warn("htmlBody is null: " + pathInfo.url);
@@ -40,6 +40,12 @@ public class HouseUnitTest {
         String url = "http://www.yantian.gov.cn/cn/zwgk/tzgg/";
         String content = String.format("%s：%s<br/><a href=\"%s\">%s</a>", "盐田区", "关于征集2019年盐田区改革思路的公告 ", url, url);
         Utils.senHTMLdMail("lasttimes@163.com","测试",content);
+    }
+
+    @Test
+    public void temp(){
+        String htmlBody = Utils.getHtmlBodyText(logger, "http://www.szpl.gov.cn/xxgk/gggs/",null);
+        System.out.println("htmlBody = " + htmlBody);
     }
 
 }

@@ -13,6 +13,8 @@ public class PathInfo {
     public String regex;
     @SuppressWarnings("WeakerAccess")
     public String creator;
+    @SuppressWarnings("WeakerAccess")
+    public String charset;
 
     @Override
     public String toString() {
@@ -21,6 +23,7 @@ public class PathInfo {
                 ", url='" + url + '\'' +
                 ", regex='" + regex + '\'' +
                 ", creator='" + creator + '\'' +
+                ", charset='" + charset + '\'' +
                 '}';
     }
 }

@@ -42,7 +42,7 @@ public class HouseNews {
     // 查找对应 html 中的 id ,对比保存的上一次最新id，
     // 如果没有保存记录，或者新id 大于保存id，返回对应 NewsInfo
     private static NewsInfo getLatestNewsInfo(PathInfo pathInfo, String lastId) {
-        String htmlBody = Utils.getHtmlBodyText(logger, pathInfo.url);
+        String htmlBody = Utils.getHtmlBodyText(logger, pathInfo.url,pathInfo.charset);
         if (htmlBody == null) {
             return null;
         }

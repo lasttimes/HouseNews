@@ -5,6 +5,13 @@
     "regex": "<ul\\s*class=\"ftdt-list\">\\s*<li>\\s*<a\\s*href=\"(.*/(.*?)\\.htm)\"\\s*title=\"(.*?)\".*?<span>\\s*(.*)\\s*</span>(\\s*)</li>"
   },
   {
+    "name": "市海洋局",
+    "url": "http://www.szpl.gov.cn/xxgk/gggs/",
+    "regex": "<ul\\s*class=\"list-group\">\\s*<li\\s*class=\"list-group-item\">\\s*<span.*?</span><a\\s*title='(.*?)'\\s*href=\"(\\./.*?/(.*?)\\.html)\"",
+    "creator":"baoan",
+    "charset":"gb2312"
+  },
+  {
     "name": "市保障署",
     "url": "http://www.szjs.gov.cn/zfbzfw/tzgg/",
     "regex": "<ul\\s*class=\"ftdt-list\">\\s*<li>\\s*<a\\s*href=\"(.*/(.*?)\\.htm)\"\\s*title=\"(.*?)\".*?<span>\\s*(.*)\\s*</span>(\\s*)</li>"

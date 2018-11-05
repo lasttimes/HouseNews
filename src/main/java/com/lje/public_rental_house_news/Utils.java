@@ -7,6 +7,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.internal.Util;
+import okio.Buffer;
+import okio.Okio;
 import org.apache.logging.log4j.Logger;
 
 import javax.mail.*;
@@ -16,6 +19,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
@@ -91,7 +95,7 @@ public class Utils {
         Transport.send(message);
     }
 
-    public static String getHtmlBodyText(Logger logger, String url) {
+    public static String getHtmlBodyText(Logger logger, String url,String charsetName) {
         if (sClient == null) {
             sClient = new OkHttpClient();
         }
@@ -101,7 +105,16 @@ public class Utils {
                     .build();
 
             Response response = sClient.newCall(request).execute();
-            String body = response.body() != null ? response.body().string() : null;
+            if (response.body() == null) {
+                return null;
+            }
+            String body;
+            if (charsetName == null){
+                body = response.body().string();
+            }else{
+                Charset charset = Charset.forName(charsetName);
+                body = response.body().source().readString(charset);
+            }
             if (logger != null) {
                 if (body == null) {
                     logger.warn("request return empty:" + url);
