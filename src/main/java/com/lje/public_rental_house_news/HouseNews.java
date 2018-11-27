@@ -26,7 +26,7 @@ public class HouseNews {
 
 
     // 刷新网站间隔时间, in ms
-    private static final int REFRESH_INTERVAL_IN_MS = 20;
+    private static final int REFRESH_INTERVAL_IN_MS = 10;
 
 
     private static final String CLASS_NAME_LATEST_NEWS = "LatestNewsInfo";
@@ -55,7 +55,7 @@ public class HouseNews {
                 return null;
             }
             if (lastId == null
-                    || info.id.compareTo(lastId) > 0) {
+                    || info.id.compareTo(lastId) != 0) {
                 return info;
             }
         } else {
@@ -80,8 +80,8 @@ public class HouseNews {
                 dateTime = LocalDateTime.ofInstant(d.toInstant(), ZoneId.systemDefault());
             }
 
-            boolean needUpdate = dateTime.plusMinutes(REFRESH_INTERVAL_IN_MS).isBefore(LocalDateTime.now());
-            if (needUpdate) {
+            boolean needRefresh = dateTime.plusMinutes(REFRESH_INTERVAL_IN_MS).isBefore(LocalDateTime.now());
+            if (needRefresh) {
                 logger.printf(Level.INFO, "checkLatestUpdateTime: [%s] at %s ,  Need Update", pathInfo.name, dateTime);
             } else {
                 continue;
