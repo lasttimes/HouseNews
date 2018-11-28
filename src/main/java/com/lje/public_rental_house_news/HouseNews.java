@@ -49,17 +49,15 @@ public class HouseNews {
         Pattern pattern = Pattern.compile(pathInfo.regex);
         Matcher m = pattern.matcher(htmlBody);
 
-        if (m.find()) {
+        while (m.find()) {
             NewsInfo info = NewsInfo.getCreator(pathInfo.creator).create(m);
             if (info.id == null) {
                 return null;
             }
             if (lastId == null
-                    || info.id.compareTo(lastId) != 0) {
+                    || info.id.compareTo(lastId) > 0) {
                 return info;
             }
-        } else {
-            logger.fatal("Pattern find failed! " + pathInfo.url);
         }
         return null;
     }
@@ -98,14 +96,7 @@ public class HouseNews {
     @EngineFunction("getLatestNews")
     public static void getLatestNews(@EngineFunctionParam("pathName") String pathName) {
         logger.info(">>> getLatestNews pathName:" + pathName);
-        List<PathInfo> pathInfoList = Utils.loadPathList();
-        PathInfo pathInfo = null;
-        for (PathInfo info : pathInfoList) {
-            if (info.name.equals(pathName)) {
-                pathInfo = info;
-                break;
-            }
-        }
+        PathInfo pathInfo = PathInfo.findInList(Utils.loadPathList(), pathName);
         if (pathInfo == null) {
             logger.error("getLatestNews: pathName[" + pathName + "] not found");
             return;

@@ -3,14 +3,18 @@ import com.lje.public_rental_house_news.PathInfo;
 import com.lje.public_rental_house_news.Utils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.Assert;
+
+import static org.junit.Assert.*;
+
 import org.junit.Test;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 
 public class HouseUnitTest {
 
@@ -21,7 +25,7 @@ public class HouseUnitTest {
         List<PathInfo> pathInfoList = Utils.loadPathList();
 
         for (PathInfo pathInfo : pathInfoList) {
-            String htmlBody = Utils.getHtmlBodyText(logger, pathInfo.url,pathInfo.charset);
+            String htmlBody = Utils.getHtmlBodyText(logger, pathInfo.url, pathInfo.charset);
             Pattern pattern = Pattern.compile(pathInfo.regex);
             if (htmlBody == null) {
                 logger.warn("htmlBody is null: " + pathInfo.url);
@@ -29,7 +33,7 @@ public class HouseUnitTest {
             }
             Matcher m = pattern.matcher(htmlBody);
             logger.info(pathInfo.name + " url:" + pathInfo.url);
-            Assert.assertTrue(m.find());
+            assertTrue(m.find());
             NewsInfo info = NewsInfo.getCreator(pathInfo.creator).create(m);
             logger.info("newsInfo:" + info);
         }
@@ -39,13 +43,20 @@ public class HouseUnitTest {
     public void checkMailOK() throws IOException, MessagingException {
         String url = "http://www.yantian.gov.cn/cn/zwgk/tzgg/";
         String content = String.format("%s：%s<br/><a href=\"%s\">%s</a>", "盐田区", "关于征集2019年盐田区改革思路的公告 ", url, url);
-        Utils.senHTMLdMail("lasttimes@163.com","测试",content);
+        Utils.senHTMLdMail("lasttimes@163.com", "测试", content);
     }
 
     @Test
-    public void temp(){
-        String htmlBody = Utils.getHtmlBodyText(logger, "http://www.szpl.gov.cn/xxgk/gggs/",null);
-        System.out.println("htmlBody = " + htmlBody);
-    }
+    public void temp() {
+        PathInfo pathInfo = Utils.loadPathList().get(0);
 
+        String htmlBody = Utils.getHtmlBodyText(logger, pathInfo.url, pathInfo.charset);
+        Pattern pattern = Pattern.compile(pathInfo.regex);
+        Matcher m = pattern.matcher(htmlBody);
+        while (m.find()){
+            logger.info(pathInfo.name + " url:" + pathInfo.url);
+            NewsInfo info = NewsInfo.getCreator(pathInfo.creator).create(m);
+            logger.info("newsInfo:" + info);
+        }
+    }
 }

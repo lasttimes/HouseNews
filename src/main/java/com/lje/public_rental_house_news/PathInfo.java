@@ -1,5 +1,7 @@
 package com.lje.public_rental_house_news;
 
+import java.util.List;
+
 public class PathInfo {
     public PathInfo() {
 
@@ -25,5 +27,16 @@ public class PathInfo {
                 ", creator='" + creator + '\'' +
                 ", charset='" + charset + '\'' +
                 '}';
+    }
+
+    public static PathInfo findInList(List<PathInfo> list, String pathName) {
+        PathInfo pathInfo = null;
+        for (PathInfo info : list) {
+            if (info.name.equals(pathName)) {
+                pathInfo = info;
+                break;
+            }
+        }
+        return pathInfo;
     }
 }

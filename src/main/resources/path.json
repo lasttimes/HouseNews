@@ -2,34 +2,35 @@
   {
     "name": "市住建局",
     "url": "http://www.szjs.gov.cn/csml/bgs/xxgk/tzgg_1/",
-    "regex": "<ul\\s*class=\"ftdt-list\">\\s*<li>\\s*<a\\s*href=\"(.*/(.*?)\\.htm)\"\\s*title=\"(.*?)\".*?<span>\\s*(.*)\\s*</span>(\\s*)</li>"
+    "creator":"szjs",
+    "regex": "<li\\s*(class=\"bgstyle\")*>\\s*<a\\s*href=\"(.*/(.*?)\\.htm)\"\\s*title=\"(.*?)\".*?<span>\\s*(.*)\\s*</span>(\\s*)</li>"
   },
   {
     "name": "市规划国土委",
     "url": "http://www.szpl.gov.cn/xxgk/gggs/",
-    "regex": "<ul\\s*class=\"list-group\">\\s*<li\\s*class=\"list-group-item\">\\s*<span.*?</span><a\\s*title='(.*?)'\\s*href=\"(\\./.*?/(.*?)\\.html)\"",
+    "regex": "li\\s*class=\"list-group-item\">\\s*<span.*?</span><a\\s*title='(.*?)'\\s*href=\"(\\./.*?/(.*?)\\.html)\"",
     "creator":"baoan",
     "charset":"gb2312"
   },
   {
     "name": "市保障署",
     "url": "http://www.szjs.gov.cn/zfbzfw/tzgg/",
-    "regex": "<ul\\s*class=\"ftdt-list\">\\s*<li>\\s*<a\\s*href=\"(.*/(.*?)\\.htm)\"\\s*title=\"(.*?)\".*?<span>\\s*(.*)\\s*</span>(\\s*)</li>"
+    "regex": "<li>\\s*<a\\s*href=\"(.*/(.*?)\\.htm)\"\\s*title=\"(.*?)\".*?<span>\\s*(.*)\\s*</span>(\\s*)</li>"
   },
   {
     "name":"市住建局项目建设信息",
     "url":"http://www.szjs.gov.cn/csml/zfbz/xxgk/bzxm/?cid=122033",
-    "regex": "<ul\\s*class=\"ftdt-list\">\\s*<li>\\s*<a\\s*href=\"(.*/(.*?)\\.pdf)\"\\s*title=\"(.*?)\".*?<span>\\s*(.*)\\s*</span>(\\s*)</li>"
+    "regex": "<li>\\s*<a\\s*href=\"(.*/(.*?)\\.pdf)\"\\s*title=\"(.*?)\".*?<span>\\s*(.*)\\s*</span>(\\s*)</li>"
   },
   {
     "name":"市住建局住房保障",
     "url":"http://www.szjs.gov.cn/csml/zcfg/xxgk/zcfg_1/zcfg/bzzf/index_22358.htm?cid=81063",
-    "regex": "<ul\\s*class=\"ftdt-list\">\\s*<li>\\s*<a\\s*href=\"(.*/(.*?)\\.htm)\"\\s*title=\"(.*?)\".*?<span>\\s*(.*)\\s*</span>(\\s*)</li>"
+    "regex": "<li>\\s*<a\\s*href=\"(.*/(.*?)\\.htm)\"\\s*title=\"(.*?)\".*?<span>\\s*(.*)\\s*</span>(\\s*)</li>"
   },
   {
     "name": "南山区住建局",
     "url": "http://www.szns.gov.cn/xxgk/bmxxgk/qzjj/xxgk/qt/tzgg/",
-    "regex": "<ul\\s*class='lb'>\\s*<li>\\s*<h3>\\s*<a\\s*href='(.*/(.*?)\\..*)'\\s*>\\s*<div.*>.*</div>\\s*(.*)</a>"
+    "regex": "<li>\\s*<h3>\\s*<a\\s*href='(.*/(.*?)\\..*)'\\s*>\\s*<div.*>.*</div>\\s*(.*)</a>"
   },
   {
     "name": "罗湖区住建局",
@@ -39,7 +40,7 @@
   {
     "name": "福田区住建局",
     "url": "http://www.szft.gov.cn/bmxx/qjsj/tzgg/",
-    "regex": "<ul\\s*class=\"gl-list\">\\s*<li>\\s*<span>.*</span>\\s*<a\\s*href=\"(.*/(.*?)\\.htm)\"\\s*target=\".*\"\\s*>\\s*(.*)\\s*</a>"
+    "regex": "<li>\\s*<span>.*</span>\\s*<a\\s*href=\"(.*/(.*?)\\.htm)\"\\s*target=\".*\"\\s*>\\s*(.*)\\s*</a>"
   },
   {
     "name": "宝安区住建局",
@@ -50,7 +51,7 @@
   {
     "name": "龙岗区住建局",
     "url": "http://www.lg.gov.cn/bmzz/zjj/xxgk/qt/tzgg/",
-    "regex": "<div\\s+class=\"news_list\">\\s*<ul>\\s*<li>\\s*<a.*href=\"(.*/(.*?)\\.htm)\".*>(.*?)</a>.*?<span>(.*?)</span>"
+    "regex": "<li>\\s*<a.*href=\"(.*/(.*?)\\.htm)\".*>(.*?)</a>.*?<span>(.*?)</span>"
   },
   {
     "name": "光明区住建局",
