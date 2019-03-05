@@ -2,15 +2,15 @@
   {
     "name": "市住建局",
     "url": "http://www.szjs.gov.cn/csml/bgs/xxgk/tzgg_1/",
-    "creator":"szjs",
+    "creator": "szjs",
     "regex": "<li\\s*(class=\"bgstyle\")*>\\s*<a\\s*href=\"(.*/(.*?)\\.htm)\"\\s*title=\"(.*?)\".*?<span>\\s*(.*)\\s*</span>(\\s*)</li>"
   },
   {
     "name": "市规划国土委",
     "url": "http://www.szpl.gov.cn/xxgk/gggs/",
     "regex": "li\\s*class=\"list-group-item\">\\s*<span.*?</span><a\\s*title='(.*?)'\\s*href=\"(\\./.*?/(.*?)\\.html)\"",
-    "creator":"baoan",
-    "charset":"gb2312"
+    "creator": "baoan",
+    "charset": "gb2312"
   },
   {
     "name": "市保障署",
@@ -18,13 +18,13 @@
     "regex": "<li>\\s*<a\\s*href=\"(.*/(.*?)\\.htm)\"\\s*title=\"(.*?)\".*?<span>\\s*(.*)\\s*</span>(\\s*)</li>"
   },
   {
-    "name":"市住建局项目建设信息",
-    "url":"http://www.szjs.gov.cn/csml/zfbz/xxgk/bzxm/?cid=122033",
+    "name": "市住建局项目建设信息",
+    "url": "http://www.szjs.gov.cn/csml/zfbz/xxgk/bzxm/?cid=122033",
     "regex": "<li>\\s*<a\\s*href=\"(.*/(.*?)\\.pdf)\"\\s*title=\"(.*?)\".*?<span>\\s*(.*)\\s*</span>(\\s*)</li>"
   },
   {
-    "name":"市住建局住房保障",
-    "url":"http://www.szjs.gov.cn/csml/zcfg/xxgk/zcfg_1/zcfg/bzzf/index_22358.htm?cid=81063",
+    "name": "市住建局住房保障",
+    "url": "http://www.szjs.gov.cn/csml/zcfg/xxgk/zcfg_1/zcfg/bzzf/index_22358.htm?cid=81063",
     "regex": "<li>\\s*<a\\s*href=\"(.*/(.*?)\\.htm)\"\\s*title=\"(.*?)\".*?<span>\\s*(.*)\\s*</span>(\\s*)</li>"
   },
   {
@@ -46,7 +46,7 @@
     "name": "宝安区住建局",
     "url": "http://www.baoan.gov.cn/jshej/ywgz_136247/tzgg/",
     "regex": "<div\\s*class=\"list_name\">\\s*<a\\s*title=\"(.*)\"\\s*href=\"(.*/(.*?)\\.htm)\"",
-    "creator":"baoan"
+    "creator": "baoan"
   },
   {
     "name": "龙岗区住建局",
@@ -67,5 +67,10 @@
     "name": "坪山区住建局",
     "url": "http://www.szpsq.gov.cn/gbmxxgk/zfhjsj/jt/tzgg/",
     "regex": "<div\\s*class=\"item mb15 whiteBg clearfix\">\\s*<a\\s*href=\"(.*/(.*?)\\.htm)\"\\s*>\\s*<strong.*?>(.*)</strong>"
+  },
+  {
+    "name": "大鹏住建局",
+    "url": "http://www.dpxq.gov.cn/zxfw/zdlyfw/bzxzf/tzgg/",
+    "regex": "<li>\\s*<span>.*</span>\\s*<a\\s*href=\"(.*/(.*?)\\.htm)\"\\s*target=\".*\"\\s*title=\"(.*?)\""
   }
 ]
