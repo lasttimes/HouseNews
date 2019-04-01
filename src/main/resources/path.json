@@ -1,20 +1,20 @@
 [
   {
     "name": "市住建局",
-    "url": "http://www.szjs.gov.cn/csml/bgs/xxgk/tzgg_1/",
+    "url": "http://zjj.sz.gov.cn/csml/bgs/xxgk/tzgg_1/",
     "creator": "szjs",
     "regex": "<li\\s*(class=\"bgstyle\")*>\\s*<a\\s*href=\"(.*/(.*?)\\.htm)\"\\s*title=\"(.*?)\".*?<span>\\s*(.*)\\s*</span>(\\s*)</li>"
   },
   {
     "name": "市规划国土委",
-    "url": "http://www.szpl.gov.cn/xxgk/gggs/",
+    "url": "http://pnr.sz.gov.cn/xxgk/gggs/",
     "regex": "li\\s*class=\"list-group-item\">\\s*<span.*?</span><a\\s*title='(.*?)'\\s*href=\"(\\./.*?/(.*?)\\.html)\"",
     "creator": "baoan",
     "charset": "gb2312"
   },
   {
     "name": "市保障署",
-    "url": "http://www.szjs.gov.cn/zfbzfw/tzgg/",
+    "url": "http://zjj.sz.gov.cn/zfbzfw/tzgg/",
     "regex": "<li>\\s*<a\\s*href=\"(.*/(.*?)\\.htm)\"\\s*title=\"(.*?)\".*?<span>\\s*(.*)\\s*</span>(\\s*)</li>"
   },
   {
