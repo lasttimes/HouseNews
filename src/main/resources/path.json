@@ -61,16 +61,16 @@
   {
     "name": "龙华区住建局",
     "url": "http://apps.szlhq.gov.cn/lhxinqu/fwztgb/zfztgb/zxgg38/index.html",
-    "regex": "<ul\\s*class=\"list-conLM-detail\">\\s*<li>\\s*<a\\s*href=\"(/lhxinqu/fwztgb/zfztgb/zxgg38/(.*?)/index\\.html)\".*?>\\s*(.*)\\s*</a>"
+    "regex": "<li>\\s*<a\\s*href=\"(.*/(.*?)\\/index.html)\"\\s*.*title=\"(.*)\"\\s*istitle=\"true\""
   },
   {
     "name": "坪山区住建局",
     "url": "http://www.szpsq.gov.cn/gbmxxgk/zfhjsj/jt/tzgg/",
-    "regex": "<div\\s*class=\"item mb15 whiteBg clearfix\">\\s*<a\\s*href=\"(.*/(.*?)\\.htm)\"\\s*>\\s*<strong.*?>(.*)</strong>"
+    "regex": "<div\\s*class=\"item mb15 whiteBg clearfix\">\\s*<a href=\"(\\./.*/(.*?)\\.htm)\">\\s*<strong class=\"fz16\">(.*)</strong>"
   },
   {
     "name": "大鹏住建局",
     "url": "http://www.dpxq.gov.cn/zxfw/zdlyfw/bzxzf/tzgg/",
-    "regex": "<li>\\s*<span>.*</span>\\s*<a\\s*href=\"(.*/(.*?)\\.htm)\"\\s*target=\".*\"\\s*title=\"(.*?)\""
+    "regex": "<li><span><s>.*</s></span>\\s*<a\\s*href=\"(.*/(.*?)\\.htm)\"\\s*title=\"(.*?)\"\\s*>"
   }
 ]
