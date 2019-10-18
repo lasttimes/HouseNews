@@ -154,7 +154,7 @@ public class HouseNews {
             return;
         }
         String toAddress = props.getProperty("toAddress");
-        String subject = pathInfo.name + "有新公告";
+        String subject = pathInfo.name + "，有新公告";
         String content = String.format("%s<br/>%s<br><a href=\"%s\">%s</a>", pathInfo.name, newsInfo.title, pathInfo.url, pathInfo.url);
         try {
             Utils.senHTMLdMail(toAddress, subject, content);

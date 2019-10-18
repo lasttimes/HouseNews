@@ -37,6 +37,15 @@ public class HouseUnitTest {
             assertTrue(m.find());
             NewsInfo info = NewsInfo.getCreator(pathInfo.creator).create(m);
             logger.info("newsInfo:" + info);
+
+            String toAddress = "lasttimes@163.com";
+            String subject = pathInfo.name + "，有新公告";
+            String content = String.format("%s<br/>%s<br><a href=\"%s\">%s</a>", pathInfo.name, info.title, pathInfo.url, pathInfo.url);
+            try {
+                Utils.senHTMLdMail(toAddress, subject, content);
+            } catch (IOException | MessagingException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -56,17 +65,7 @@ public class HouseUnitTest {
         String htmlBody = Utils.getHtmlBodyText(logger, pathInfo.url, pathInfo.charset);
         logger.info(pathInfo.regex);
         Pattern pattern = Pattern.compile(pathInfo.regex);
-        // test
-//        pattern = Pattern.compile("<div");
         assertNotNull(htmlBody);
-        // test
-        htmlBody = "<div class=\"col-lg-6 col-sm-6 grayBg p10\">\n" +
-                "                    <div class=\"news-item-temp1 whiteBg p20\">\n" +
-                "                        <a href=\"./201910/t20191016_18331001.htm\"><strong>\n" +
-                "                        关于面向盐田区户籍在册轮候家庭配租公共租赁住房认租初审结果公示的通告</strong><b>发布时间： ［2019-10-16］</b>\n" +
-                "                        </a>\n" +
-                "                    </div>\n" +
-                "                </div>";
         Matcher m = pattern.matcher(htmlBody);
         while (m.find()){
             logger.info("m.find");

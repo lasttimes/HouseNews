@@ -3,9 +3,9 @@ package com.lje.public_rental_house_news;
 import java.util.regex.Matcher;
 
 public class NewsInfo implements Comparable<NewsInfo> {
-    String id;
+    public String id;
     private String href;
-    String title;
+    public String title;
 
     private NewsInfo(String href, String id, String title) {
         this.href = href;
