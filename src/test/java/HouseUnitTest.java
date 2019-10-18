@@ -54,12 +54,22 @@ public class HouseUnitTest {
         logger.info(pathInfo.toString());
 
         String htmlBody = Utils.getHtmlBodyText(logger, pathInfo.url, pathInfo.charset);
+        logger.info(pathInfo.regex);
         Pattern pattern = Pattern.compile(pathInfo.regex);
+        // test
+//        pattern = Pattern.compile("<div");
         assertNotNull(htmlBody);
         // test
-        htmlBody = "<a href=\"./201910/t20191008_18242711.htm\" title=\"深圳市大鹏新区住房和建设局关于面向大鹏新区先进制造业企业定向配租公共租赁住房的通告\">深圳市大鹏新区住房和建设局关于面向大鹏新区先进制造业企业定向配租公共租赁住房的通告</a></li>";
+        htmlBody = "<div class=\"col-lg-6 col-sm-6 grayBg p10\">\n" +
+                "                    <div class=\"news-item-temp1 whiteBg p20\">\n" +
+                "                        <a href=\"./201910/t20191016_18331001.htm\"><strong>\n" +
+                "                        关于面向盐田区户籍在册轮候家庭配租公共租赁住房认租初审结果公示的通告</strong><b>发布时间： ［2019-10-16］</b>\n" +
+                "                        </a>\n" +
+                "                    </div>\n" +
+                "                </div>";
         Matcher m = pattern.matcher(htmlBody);
         while (m.find()){
+            logger.info("m.find");
             logger.info(pathInfo.name + " url:" + pathInfo.url);
             NewsInfo info = NewsInfo.getCreator(pathInfo.creator).create(m);
             logger.info("newsInfo:" + info);
