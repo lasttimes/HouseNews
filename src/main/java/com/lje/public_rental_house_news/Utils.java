@@ -15,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeUtility;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -89,7 +90,7 @@ public class Utils {
         message.setFrom(new InternetAddress(props.getProperty("username")));
         message.setRecipients(Message.RecipientType.TO,
                 InternetAddress.parse(toAddress));
-        message.setSubject(subject);
+        message.setSubject(MimeUtility.encodeText(subject,"UTF-8",null));
         message.setText(content, "UTF-8", "HTML");
 
         Transport.send(message);
