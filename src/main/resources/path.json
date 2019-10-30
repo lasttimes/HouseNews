@@ -1,6 +1,6 @@
 [
   {
-    "name": "市住建局",
+    "name": "市住建局通知公告",
     "url": "http://zjj.sz.gov.cn/csml/bgs/xxgk/tzgg_1/",
     "creator": "szjs",
     "regex": "<li\\s*(class=\"bgstyle\")*>\\s*<a\\s*href=\"(.*/(.*?)\\.htm)\"\\s*title=\"(.*?)\".*?<span>\\s*(.*)\\s*</span>(\\s*)</li>"
@@ -77,5 +77,10 @@
     "name": "盐田住建局",
     "url": "http://www.yantian.gov.cn/icatalog/bm/jsj/04/zfbzgk/dt/",
     "regex": "<div\\s*class=\"news-item-temp1\\s*whiteBg\\s*p20\">\\s*<a\\s*href=\"(.*/(.*?)\\.htm)\">\\s*<strong>\\s*(.*)\\s*</strong>"
+  },
+  {
+    "name": "市住建局项目建设信息",
+    "url": "http://www.yantian.gov.cn/icatalog/bm/jsj/04/zfbzgk/dt/",
+    "regex": "<li\\s*>\\s*<a\\s*href=\"(.*/(.*?)\\.pdf)\"\\s*title=\"(.*?)\"\\s*>"
   }
 ]
