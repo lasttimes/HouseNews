@@ -12,6 +12,7 @@ import okio.Buffer;
 import okio.Okio;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -68,35 +69,42 @@ public class Utils {
     /**
      * 发送邮件
      *
-     * @param toAddress 接收方邮件地址
+     * @param toAddresses 接收方邮件地址,多个以逗号分隔
      * @param subject   邮件主题
      * @param content   　邮件内容(HTML格式)
      */
-    public static void senHTMLdMail(String toAddress, String subject, String content) throws IOException, MessagingException {
-        // 163 邮箱
-        final Properties props = new Properties();
-        loadProperties(props, "mail.properties");
+    public static void senHTMLdMail(String toAddresses, String subject, String content) throws IOException, MessagingException {
+        if (toAddresses == null){
+            return;
+        }
+        String[] adrArray = toAddresses.split(",");
+        for (String adr:adrArray){
+            // 163 邮箱
+            final Properties props = new Properties();
+            loadProperties(props, "mail.properties");
 
-        Session session = Session.getInstance(props,
-                new javax.mail.Authenticator() {
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        String username = props.getProperty("username");
-                        String password = props.getProperty("password");
-                        return new PasswordAuthentication(username, password);
-                    }
-                });
+            Session session = Session.getInstance(props,
+                    new javax.mail.Authenticator() {
+                        protected PasswordAuthentication getPasswordAuthentication() {
+                            String username = props.getProperty("username");
+                            String password = props.getProperty("password");
+                            return new PasswordAuthentication(username, password);
+                        }
+                    });
 
-        MimeMessage message = new MimeMessage(session);
-        message.setFrom(new InternetAddress(props.getProperty("username")));
-        message.setRecipients(Message.RecipientType.TO,
-                InternetAddress.parse(toAddress));
-        message.setSubject(MimeUtility.encodeText(subject,"UTF-8",null));
-        message.setText(content, "UTF-8", "HTML");
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(props.getProperty("username")));
+            message.setRecipients(Message.RecipientType.TO,
+                    InternetAddress.parse(adr));
+            message.setSubject(MimeUtility.encodeText(subject,"UTF-8",null));
+            message.setText(content, "UTF-8", "HTML");
 
-        Transport.send(message);
+            Transport.send(message);
+        }
+
     }
 
-    public static String getHtmlBodyText(Logger logger, String url,String charsetName) {
+    public static String getHtmlBodyText(@Nullable Logger logger, String url, String charsetName) {
         if (sClient == null) {
             sClient = new OkHttpClient();
         }

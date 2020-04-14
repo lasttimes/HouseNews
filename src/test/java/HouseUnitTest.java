@@ -51,9 +51,9 @@ public class HouseUnitTest {
 
     @Test
     public void checkMailOK() throws IOException, MessagingException {
-        String url = "http://www.yantian.gov.cn/cn/zwgk/tzgg/";
-        String content = String.format("%s：%s<br/><a href=\"%s\">%s</a>", "盐田区", "关于征集2019年盐田区改革思路的公告 ", url, url);
-        Utils.senHTMLdMail("lasttimes@163.com", "测试", content);
+        String url = "http://www.baidu.com/";
+        String content = String.format("%s：%s<br/><a href=\"%s\">%s</a>", "测试", "测试下 ", url, url);
+        Utils.senHTMLdMail("lasttimes@163.com,61244036@qq.com", "测试", content);
     }
 
     @Test
