@@ -3,7 +3,7 @@
     "name": "市住建局通知公告",
     "url": "http://zjj.sz.gov.cn/csml/bgs/xxgk/tzgg_1/",
     "creator": "szjs",
-    "regex": "<li\\s*(class=\"bgstyle\")*>\\s*<a\\s*href=\"(.*/(.*?)\\.htm)\"\\s*title=\"(.*?)\".*?<span>\\s*(.*)\\s*</span>(\\s*)</li>"
+    "regex": "<li\\s*.*id=\"([0-9]+)\"\\s*>\\s*<a\\s*href=\"(.*\\.htm)\"\\s*title=\"(.*?)\".*?</a>\\s*<span>.*</span>\\s*</li>"
   },
   {
     "name": "市规划国土委",
@@ -15,7 +15,7 @@
   {
     "name": "市保障署",
     "url": "http://zjj.sz.gov.cn/zfbzfw/tzgg/",
-    "regex": "<li>\\s*<a\\s*href=\"(.*/(.*?)\\.htm)\"\\s*title=\"(.*?)\".*?<span>\\s*(.*)\\s*</span>(\\s*)</li>"
+    "regex": "<li\\s*.*id=\"([0-9]+)\"\\s*>\\s*<a\\s*href=\"(.*\\.htm)\"\\s*title=\"(.*?)\".*?</a>\\s*<span>.*</span>\\s*</li>"
   },
   {
     "name": "市住建局项目建设信息",
@@ -44,7 +44,7 @@
   },
   {
     "name": "宝安区住建局",
-    "url": "http://www.baoan.gov.cn/jshej/ywgz_136247/tzgg/",
+    "url": "http://www.baoan.gov.cn/jshej/zwfw/zfly/tzgg/",
     "regex": "<div\\s*class=\"list_name\">\\s*<a\\s*title=\"(.*)\"\\s*href=\"(.*/(.*?)\\.htm)\"",
     "creator": "baoan"
   },
@@ -65,7 +65,7 @@
   },
   {
     "name": "坪山区住建局",
-    "url": "http://www.szpsq.gov.cn/gbmxxgk/zfhjsj/jt/tzgg/",
+    "url": "http://www.szpsq.gov.cn/gbmxxgk/zfhjsj/qt/tzgg/",
     "regex": "<div\\s*class=\"item mb15 whiteBg clearfix\">\\s*<a href=\"(\\./.*/(.*?)\\.htm)\">\\s*<strong class=\"fz16\">(.*)</strong>"
   },
   {
@@ -81,6 +81,6 @@
   {
     "name": "市住建局项目建设信息",
     "url": "http://www.yantian.gov.cn/icatalog/bm/jsj/04/zfbzgk/dt/",
-    "regex": "<li\\s*>\\s*<a\\s*href=\"(.*/(.*?)\\.pdf)\"\\s*title=\"(.*?)\"\\s*>"
+    "regex": "<div\\s*class=\"news-item-temp1 whiteBg p20\"\\s*>\\s*<a\\s*href=\"(\\./.*/(.*?)\\.htm)\"\\s*>\\s*<strong>\\s*(.*)\\s*</strong>"
   }
 ]

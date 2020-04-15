@@ -3,17 +3,17 @@ import com.lje.public_rental_house_news.PathInfo;
 import com.lje.public_rental_house_news.Utils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 
 public class HouseUnitTest {
@@ -51,15 +51,16 @@ public class HouseUnitTest {
 
     @Test
     public void checkMailOK() throws IOException, MessagingException {
-        String url = "http://www.baidu.com/";
-        String content = String.format("%s：%s<br/><a href=\"%s\">%s</a>", "测试", "测试下 ", url, url);
-        Utils.senHTMLdMail("lasttimes@163.com,61244036@qq.com", "测试", content);
+        String uuid = UUID.randomUUID().toString();
+        String url = "https://jandan.net/";
+        String content = String.format("%s：%s<br/><a href=\"%s\">%s</a>", uuid, uuid, url, url);
+        Utils.senHTMLdMail("61244036@qq.com", "测试", content);
     }
 
     @Test
     public void temp() {
         List<PathInfo> list = Utils.loadPathList();
-        PathInfo pathInfo = list.get(list.size() - 1);
+        PathInfo pathInfo = list.get(list.size() -1);
         logger.info(pathInfo.toString());
 
         String htmlBody = Utils.getHtmlBodyText(logger, pathInfo.url, pathInfo.charset);
